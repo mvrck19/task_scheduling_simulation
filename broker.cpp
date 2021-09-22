@@ -26,9 +26,17 @@ private:
         else
         {
             vector<Task> next = task.next;
-            // return (mean_comp + maxNext())
+            return (mean_comp + maxNext(task.next));
         }
         
+    }
+    double maxNext(vector<Task> next){
+        double maximum=0;
+        for (auto &&task : next)
+        {
+            if (upward_rank(task)>maximum) maximum=upward_rank(task);
+        }
+        return maximum;
     }
     int exit_task()
     {
