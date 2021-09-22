@@ -6,6 +6,7 @@ class Task
 {
 public:
    int mips;
+   double up_rank; //May need to remove later
    vector<Task> prev;
    vector<Task> next;
 
