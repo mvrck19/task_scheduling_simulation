@@ -35,7 +35,7 @@ private:
 
     static bool comp(Task a, Task b)
     {
-        return (a.up_rank < b.up_rank);
+        return (a.up_rank > b.up_rank);
     }
 
     void create_rank()
@@ -82,20 +82,19 @@ private:
             }
         }
     }
-    //TODO fix this function
     // Returns the numerical value of the mean computation of the tasks inside the workflow
     double mean_computation()
     {
-        // double sum = 0;
-        // for (int i = 0; i < vms.size(); i++)
-        // {
-        //     for (int j = 0; i < w.tasks.size(); j++)
-        //     {
-        //         sum = sum + (w.tasks.at(j).mips / vms.at(i).mips_capacity);
-        //     }
-        // }
-        // return sum / vms.size();
-        return 5;
+        double sum = 0;
+        for (auto &&vm : vms)
+        {
+            for (auto &&task : w.tasks)
+            {
+                sum = sum + (task.mips / vm.mips_capacity);
+            }
+        }
+        return sum / vms.size();
+        // return 5;
     }
     //TODO implement later if needed
     // Returns the numerical value of the mean communication of the tasks inside the workflow

@@ -2,6 +2,7 @@
 #include <vector>
 #include "task.cpp"
 #include "vm.cpp"
+#pragma once
 
 using namespace std;
 class Workflow

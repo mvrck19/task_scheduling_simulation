@@ -5,7 +5,7 @@ int main(int argc, char const *argv[])
 {
     vector<int> numbers={1,2,3};
 
-    for (auto &i : numbers)
+    for (auto &&i : numbers)
     {
         cout << i;
     }
