@@ -1,25 +1,58 @@
 #include <iostream>
 #include <vector>
-#include "task.cpp"
-#include "vm.cpp"
 #include "workflow.cpp"
+#include <algorithm>
 
 using namespace std;
-class broker
+class Broker
 {
 public:
     vector<Vm> vms;
     Workflow w;
 
-    broker();
+    Broker(vector<Vm> vms, Workflow w)
+    {
+        this->vms = vms;
+        this->w = w;
+        create_rank();
+        rank_sort();
+    };
+
+    void display()
+    {
+        for (auto &&task : w.tasks)
+        {
+            cout << task.up_rank << "\n";
+        }
+    }
+
 private:
+    // TODO write function to use up upward_rank to sort tasks in order so that we can test the algirithm out
+    void rank_sort()
+    {
+        sort(w.tasks.begin(), w.tasks.end(),comp);
+    }
+
+    static bool comp(Task a, Task b)
+    {
+        return (a.up_rank < b.up_rank);
+    }
+
+    void create_rank()
+    {
+        for (auto &&task : w.tasks)
+        {
+            task.up_rank = upward_rank(task);
+        }
+    }
+
     // TODO write upward rank function to calculate task priorities
     // Returns the numerical value of the upward rank of a task
     double upward_rank(Task task)
     {
         //use nodeweight function from sim3
         double mean_comp = mean_computation();
-        if (task.next.empty()==true)
+        if (task.next.empty() == true)
         {
             return mean_comp;
         }
@@ -28,13 +61,14 @@ private:
             vector<Task> next = task.next;
             return (mean_comp + maxNext(task.next));
         }
-        
     }
-    double maxNext(vector<Task> next){
-        double maximum=0;
+    double maxNext(vector<Task> next)
+    {
+        double maximum = 0;
         for (auto &&task : next)
         {
-            if (upward_rank(task)>maximum) maximum=upward_rank(task);
+            if (upward_rank(task) > maximum)
+                maximum = upward_rank(task);
         }
         return maximum;
     }
@@ -48,21 +82,22 @@ private:
             }
         }
     }
-
+    //TODO fix this function
     // Returns the numerical value of the mean computation of the tasks inside the workflow
     double mean_computation()
     {
-        double sum = 0;
-        for (int i = 0; i < vms.size(); i++)
-        {
-            for (int j = 0; i < w.tasks.size(); j++)
-            {
-                sum = sum + (w.tasks.at(j).mips / vms.at(i).mips_capacity);
-            }
-        }
-        return sum / vms.size();
+        // double sum = 0;
+        // for (int i = 0; i < vms.size(); i++)
+        // {
+        //     for (int j = 0; i < w.tasks.size(); j++)
+        //     {
+        //         sum = sum + (w.tasks.at(j).mips / vms.at(i).mips_capacity);
+        //     }
+        // }
+        // return sum / vms.size();
+        return 5;
     }
-    //TODO implement later if needed 
+    //TODO implement later if needed
     // Returns the numerical value of the mean communication of the tasks inside the workflow
     double mean_communication()
     {
