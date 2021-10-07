@@ -18,6 +18,30 @@ public:
         rank_sort();
     };
 
+    void run()
+    // TODO how to handle the time thing of it all  -> for example this
+    // function must consider giving a task to a vm considering the shortest
+    // possible time to complete it or something -> read the paper for it
+    {
+        for (auto &&task : w.tasks)
+        {
+            // if(task.dependancies==done) find_vm(task)
+            if (task.dependancies_done() == true)
+            {
+                // Vm found_vm = find_vm(task);
+                // found_vm.assign(task);
+            }
+        }
+    }
+
+    void find_vm(Task task)
+    {
+        for (auto &&vm : vms)
+        {
+            findvm and vm.assign(task);
+        }
+    }
+
     void display()
     {
         for (auto &&task : w.tasks)
@@ -30,7 +54,7 @@ private:
     // TODO write function to use up upward_rank to sort tasks in order so that we can test the algirithm out
     void rank_sort()
     {
-        sort(w.tasks.begin(), w.tasks.end(),comp);
+        sort(w.tasks.begin(), w.tasks.end(), comp);
     }
 
     static bool comp(Task a, Task b)
@@ -46,7 +70,7 @@ private:
         }
     }
 
-    // TODO write upward rank function to calculate task priorities
+    // TODO write upward rank function to calculate task priorities and check if valid
     // Returns the numerical value of the upward rank of a task
     double upward_rank(Task task)
     {

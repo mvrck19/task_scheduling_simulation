@@ -13,8 +13,8 @@ public:
     // (Tasks must already be in the workflow to add edge between them)
     void add_edge(int t1, int t2)
     {
-        tasks.at(t1).next.push_back(tasks.at(t2));
-        tasks.at(t2).prev.push_back(tasks.at(t1));
+            tasks.at(t1).next.push_back(tasks.at(t2));
+            tasks.at(t2).prev.push_back(tasks.at(t1));
     }
     // Create task and add it to the workflow
     void add_task(int mips)
