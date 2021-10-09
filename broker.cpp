@@ -27,7 +27,7 @@ public:
     }
 
 private:
-    // TODO write function to use up upward_rank to sort tasks in order so that we can test the algirithm out
+    // TODO write function to use up upward_rank to sort tasks in order so that we can test the algorithm out
     void rank_sort()
     {
         sort(w.tasks.begin(), w.tasks.end(),comp);
@@ -52,7 +52,7 @@ private:
     {
         //use nodeweight function from sim3
         double mean_comp = mean_computation();
-        if (task.next.empty() == true)
+        if (task.next.empty())
         {
             return mean_comp;
         }
@@ -76,7 +76,7 @@ private:
     {
         for (int i = 0; i < w.tasks.size(); i++)
         {
-            if (w.tasks.at(i).next.empty() == true)
+            if (w.tasks.at(i).next.empty())
             {
                 return i;
             }
