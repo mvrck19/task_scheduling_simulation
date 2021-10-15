@@ -19,27 +19,28 @@ public:
     };
 
     void run()
-    // TODO how to handle the time thing of it all  -> for example this
-    // function must consider giving a task to a vm considering the shortest
-    // possible time to complete it or something -> read the paper for it
     {
         for (auto &&task : w.tasks)
         {
-            // if(task.dependancies==done) find_vm(task)
-            if (task.dependancies_done() == true)
+            if (task.dependancies_done())
             {
-                // Vm found_vm = find_vm(task);
-                // found_vm.assign(task);
+                Vm found_vm = find_vm(task);
+                found_vm.assign(task);
             }
         }
     }
 
-    void find_vm(Task task)
+    // Finds the vm to which if a task is added the total execution
+    // time of the workflow will be the minimum possible one
+    Vm find_vm(Task task)
     {
+        double min = task.execution_time(vms.at(0))+vms.at(0).execution_time;
+        Vm minimum = vms.at(0);
         for (auto &&vm : vms)
         {
-            findvm and vm.assign(task);
+            if(task.execution_time(vm)+vm.execution_time<min) minimum = vm;
         }
+        return minimum;
     }
 
     void display()
@@ -51,7 +52,6 @@ public:
     }
 
 private:
-    // TODO write function to use up upward_rank to sort tasks in order so that we can test the algorithm out
     void rank_sort()
     {
         sort(w.tasks.begin(), w.tasks.end(), comp);
@@ -70,11 +70,9 @@ private:
         }
     }
 
-    // TODO write upward rank function to calculate task priorities and check if valid
     // Returns the numerical value of the upward rank of a task
     double upward_rank(Task task)
     {
-        //use nodeweight function from sim3
         double mean_comp = mean_computation();
         if (task.next.empty())
         {
@@ -120,7 +118,7 @@ private:
         return sum / vms.size();
         // return 5;
     }
-    //TODO implement later if needed
+    // TODO implement later if needed
     // Returns the numerical value of the mean communication of the tasks inside the workflow
     double mean_communication()
     {

@@ -32,6 +32,10 @@ public:
       return done;
    }
 
+   double execution_time(Vm vm){
+      return mips / vm.mips_capacity;
+   }
+
    void display()
    {
       cout << "Mips: " << mips << "\n";
