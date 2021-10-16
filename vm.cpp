@@ -33,4 +33,9 @@ public:
     {
         return execution_time;
     }
+
+    double task_execution_time(Task task)
+    {
+        return task.mips / this->mips_capacity;
+    }
 };

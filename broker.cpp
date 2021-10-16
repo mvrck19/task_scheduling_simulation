@@ -34,11 +34,12 @@ public:
     // time of the workflow will be the minimum possible one
     Vm find_vm(Task task)
     {
-        double min = task.execution_time(vms.at(0))+vms.at(0).execution_time;
+        double min = vms.at(0).task_execution_time(task) + vms.at(0).get_execution_time();
         Vm minimum = vms.at(0);
         for (auto &&vm : vms)
         {
-            if(task.execution_time(vm)+vm.execution_time<min) minimum = vm;
+            if (vm.task_execution_time(task) + vm.get_execution_time() < min)
+                minimum = vm;
         }
         return minimum;
     }
