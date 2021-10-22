@@ -8,7 +8,7 @@ public:
    int id;
    int mips;
    double up_rank; //May need to remove later
-   bool done;
+   bool done=false;
    vector<Task> prev;
    vector<Task> next;
 
@@ -16,6 +16,14 @@ public:
    {
       this->mips = mips;
       this->done = false;
+   }
+
+   bool getDone(){
+      return done;
+   }
+
+   void setDone(bool done){
+      this->done=done;
    }
 
    bool dependancies_done()

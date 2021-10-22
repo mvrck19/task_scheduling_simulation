@@ -2,6 +2,7 @@
 #include <vector>
 #include "workflow.cpp"
 #include <algorithm>
+#include <string>
 
 using namespace std;
 class Broker
@@ -22,12 +23,25 @@ public:
     {
         for (auto &&task : w.tasks)
         {
+        cout << execution_times();
             if (task.dependancies_done())
             {
                 Vm found_vm = find_vm(task);
                 found_vm.assign(task);
             }
         }
+
+    }
+
+    string execution_times(){
+        string ret;
+        for (auto &&vm : vms)
+        {
+            ret.append(to_string(vm.execution_time));
+            ret.append(" | ");
+        }
+        ret.append("\n");
+        return ret;
     }
 
     // Finds the vm to which if a task is added the total execution
@@ -95,6 +109,8 @@ private:
         }
         return maximum;
     }
+
+    // TODO add a return statement for each case, if the function is needed 
     int exit_task()
     {
         for (int i = 0; i < w.tasks.size(); i++)
@@ -117,6 +133,7 @@ private:
             }
         }
         return sum / vms.size();
+        // test
         // return 5;
     }
     // TODO implement later if needed
