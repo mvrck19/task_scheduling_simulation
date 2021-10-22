@@ -8,10 +8,10 @@ using namespace std;
 class Broker
 {
 public:
-    vector<Vm> vms;
+    vector<Vm*> vms;
     Workflow w;
 
-    Broker(vector<Vm> vms, Workflow w)
+    Broker(vector<Vm*> vms, Workflow w)
     {
         this->vms = vms;
         this->w = w;
@@ -24,10 +24,10 @@ public:
         for (auto &&task : w.tasks)
         {
         cout << execution_times();
-            if (task.dependancies_done())
+            if (task->dependancies_done())
             {
-                Vm found_vm = find_vm(task);
-                found_vm.assign(task);
+                Vm found_vm = find_vm(*task);
+                found_vm.assign(*task);
             }
         }
 
@@ -37,7 +37,7 @@ public:
         string ret;
         for (auto &&vm : vms)
         {
-            ret.append(to_string(vm.execution_time));
+            ret.append(to_string(vm->execution_time));
             ret.append(" | ");
         }
         ret.append("\n");
@@ -48,12 +48,12 @@ public:
     // time of the workflow will be the minimum possible one
     Vm find_vm(Task task)
     {
-        double min = vms.at(0).task_execution_time(task) + vms.at(0).get_execution_time();
-        Vm minimum = vms.at(0);
+        double min = vms.at(0)->task_execution_time(task) + vms.at(0)->get_execution_time();
+        Vm minimum = *vms.at(0);
         for (auto &&vm : vms)
         {
-            if (vm.task_execution_time(task) + vm.get_execution_time() < min)
-                minimum = vm;
+            if (vm->task_execution_time(task) + vm->get_execution_time() < min)
+                minimum = *vm;
         }
         return minimum;
     }
@@ -62,7 +62,7 @@ public:
     {
         for (auto &&task : w.tasks)
         {
-            cout << task.up_rank << "\n";
+            cout << task->up_rank << "\n";
         }
     }
 
@@ -81,7 +81,7 @@ private:
     {
         for (auto &&task : w.tasks)
         {
-            task.up_rank = upward_rank(task);
+            task->up_rank = upward_rank(*task);
         }
     }
 
@@ -95,17 +95,18 @@ private:
         }
         else
         {
-            vector<Task> next = task.next;
+            // Is this usefull? I doubt it. Maybe? Leave it for now. If there are any problems with calculations this might be it
+            // vector<Task> next = task.next;
             return (mean_comp + maxNext(task.next));
         }
     }
-    double maxNext(vector<Task> next)
+    double maxNext(vector<Task*> next)
     {
         double maximum = 0;
         for (auto &&task : next)
         {
-            if (upward_rank(task) > maximum)
-                maximum = upward_rank(task);
+            if (upward_rank(*task) > maximum)
+                maximum = upward_rank(*task);
         }
         return maximum;
     }
@@ -115,7 +116,7 @@ private:
     {
         for (int i = 0; i < w.tasks.size(); i++)
         {
-            if (w.tasks.at(i).next.empty())
+            if (w.tasks.at(i)->next.empty())
             {
                 return i;
             }
@@ -129,7 +130,7 @@ private:
         {
             for (auto &&task : w.tasks)
             {
-                sum = sum + (task.mips / vm.mips_capacity);
+                sum = sum + (task->mips / vm->mips_capacity);
             }
         }
         return sum / vms.size();
