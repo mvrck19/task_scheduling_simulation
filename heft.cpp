@@ -11,7 +11,8 @@ vector<Vm*> create_vms()
     vector<Vm*> vms;
     for (int i = 0; i < 10; i++)
     {
-        vms.push_back(&Vm(100));
+        Vm newVm = Vm(100);
+        vms.push_back(&newVm);
     }
     return vms;
 }

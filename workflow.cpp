@@ -19,7 +19,8 @@ public:
     // Create task and add it to the workflow
     void add_task(int mips)
     {
-        tasks.push_back(&Task(mips));
+        Task newTask = Task(mips);
+        tasks.push_back(&newTask);
     }
     // Add already existing task to the workflow
     void add_task(Task t)

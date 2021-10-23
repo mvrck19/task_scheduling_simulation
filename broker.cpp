@@ -67,6 +67,7 @@ public:
     }
 
 private:
+    // TODO write it by hand dont use sort
     void rank_sort()
     {
         sort(w.tasks.begin(), w.tasks.end(), comp);
