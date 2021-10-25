@@ -9,8 +9,8 @@ public:
    int mips;
    double up_rank; //May need to remove later
    bool done=false;
-   vector<Task> prev;
-   vector<Task> next;
+   vector<Task*> prev;
+   vector<Task*> next;
 
    Task(int mips)
    {
@@ -31,7 +31,7 @@ public:
       bool done = true;
       for (auto &&task : prev)
       {
-         if (task.done == false)
+         if (task->done == false)
          {
             done = false;
             break;
