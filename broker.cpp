@@ -73,9 +73,9 @@ private:
         sort(w.tasks.begin(), w.tasks.end(), comp);
     }
 
-    static bool comp(Task a, Task b)
+    static bool comp(const Task *a, const Task *b)
     {
-        return (a.up_rank > b.up_rank);
+        return (a->up_rank < b->up_rank) ;
     }
 
     void create_rank()
