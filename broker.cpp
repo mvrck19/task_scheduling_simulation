@@ -3,7 +3,8 @@
 #include "workflow.cpp"
 #include <algorithm>
 #include <string>
-
+// TODO remove -> with .
+// and see from there
 using namespace std;
 class Broker
 {
@@ -11,10 +12,10 @@ public:
     vector<Vm*> vms;
     Workflow w;
 
-    Broker(vector<Vm*> vms, Workflow w)
+    Broker(vector<Vm*> vms, Workflow &w)
     {
         this->vms = vms;
-        this->w = w;
+        this->w.tasks=w.tasks;
         create_rank();
         rank_sort();
     };
@@ -89,17 +90,18 @@ private:
     // Returns the numerical value of the upward rank of a task
     double upward_rank(Task task)
     {
-        double mean_comp = mean_computation();
-        if (task.next.empty())
-        {
-            return mean_comp;
-        }
-        else
-        {
-            // Is this usefull? I doubt it. Maybe? Leave it for now. If there are any problems with calculations this might be it
-            // vector<Task> next = task.next;
-            return (mean_comp + maxNext(task.next));
-        }
+        // double mean_comp = mean_computation();
+        // if (task.next.empty())
+        // {
+        //     return mean_comp;
+        // }
+        // else
+        // {
+        //     // Is this usefull? I doubt it. Maybe? Leave it for now. If there are any problems with calculations this might be it
+        //     // vector<Task> next = task.next;
+        //     return (mean_comp + maxNext(task.next));
+        // }
+        return 5.0;
     }
     double maxNext(vector<Task*> next)
     {
@@ -113,16 +115,16 @@ private:
     }
 
     // TODO add a return statement for each case, if the function is needed 
-    int exit_task()
-    {
-        for (int i = 0; i < w.tasks.size(); i++)
-        {
-            if (w.tasks.at(i)->next.empty())
-            {
-                return i;
-            }
-        }
-    }
+    // int exit_task()
+    // {
+    //     for (int i = 0; i < w.tasks.size(); i++)
+    //     {
+    //         if (w.tasks.at(i)->next.empty())
+    //         {
+    //             return i;
+    //         }
+    //     }
+    // }
     // Returns the numerical value of the mean computation of the tasks inside the workflow
     double mean_computation()
     {

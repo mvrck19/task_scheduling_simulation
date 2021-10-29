@@ -8,7 +8,7 @@ using namespace std;
 class Workflow
 {
 public:
-    vector<Task *> tasks;
+    vector<Task *> tasks;  
     // Add edge between tasks on the workflow.
     // (Tasks must already be in the workflow to add edge between them)
     void add_edge(int t1, int t2)
