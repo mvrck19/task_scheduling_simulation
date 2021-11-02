@@ -3,42 +3,41 @@
 #include "workflow.cpp"
 #include <algorithm>
 #include <string>
-// TODO remove -> with .
-// and see from there
+#include <stdlib.h>
+
 using namespace std;
 class Broker
 {
 public:
-    vector<Vm*> vms;
+    vector<Vm> vms;
     Workflow w;
 
-    Broker(vector<Vm*> vms, Workflow &w)
+    Broker(vector<Vm> &vms, Workflow &w)
     {
-        this->vms = vms;
-        this->w.tasks=w.tasks;
+        this->vms = move(vms);
+        this->w = move(w);
         create_rank();
-        rank_sort();
+        // rank_sort();
     };
 
     void run()
     {
         for (auto &&task : w.tasks)
         {
-        cout << execution_times();
-            if (task->dependancies_done())
+            cout << execution_times();
+            if (task.dependancies_done())
             {
-                Vm found_vm = find_vm(*task);
-                found_vm.assign(*task);
+                find_vm(task).assign(task);
             }
         }
-
     }
 
-    string execution_times(){
+    string execution_times()
+    {
         string ret;
         for (auto &&vm : vms)
         {
-            ret.append(to_string(vm->execution_time));
+            ret.append(to_string(vm.execution_time));
             ret.append(" | ");
         }
         ret.append("\n");
@@ -47,14 +46,14 @@ public:
 
     // Finds the vm to which if a task is added the total execution
     // time of the workflow will be the minimum possible one
-    Vm find_vm(Task task)
+    Vm &find_vm(Task task)
     {
-        double min = vms.at(0)->task_execution_time(task) + vms.at(0)->get_execution_time();
-        Vm minimum = *vms.at(0);
+        double min = vms.at(0).task_execution_time(task) + vms.at(0).get_execution_time();
+        Vm &minimum = vms.at(0);
         for (auto &&vm : vms)
         {
-            if (vm->task_execution_time(task) + vm->get_execution_time() < min)
-                minimum = *vm;
+            if (vm.task_execution_time(task) + vm.get_execution_time() < min)
+                minimum = vm;
         }
         return minimum;
     }
@@ -63,27 +62,26 @@ public:
     {
         for (auto &&task : w.tasks)
         {
-            cout << task->up_rank << "\n";
+            cout << task.up_rank << "\n";
         }
     }
 
 private:
-    // TODO write it by hand dont use sort
     void rank_sort()
     {
         sort(w.tasks.begin(), w.tasks.end(), comp);
     }
 
-    static bool comp(const Task *a, const Task *b)
+    static bool comp(const Task a, const Task b)
     {
-        return (a->up_rank < b->up_rank) ;
+        return (a.up_rank < b.up_rank);
     }
 
     void create_rank()
     {
         for (auto &&task : w.tasks)
         {
-            task->up_rank = upward_rank(*task);
+            task.up_rank = upward_rank(task);
         }
     }
 
@@ -101,20 +99,21 @@ private:
         //     // vector<Task> next = task.next;
         //     return (mean_comp + maxNext(task.next));
         // }
-        return 5.0;
+
+        return rand() % 10 + 1;
     }
-    double maxNext(vector<Task*> next)
+    double maxNext(vector<Task> next)
     {
         double maximum = 0;
         for (auto &&task : next)
         {
-            if (upward_rank(*task) > maximum)
-                maximum = upward_rank(*task);
+            if (upward_rank(task) > maximum)
+                maximum = upward_rank(task);
         }
         return maximum;
     }
 
-    // TODO add a return statement for each case, if the function is needed 
+    // TODO add a return statement for each case, if the function is needed
     // int exit_task()
     // {
     //     for (int i = 0; i < w.tasks.size(); i++)
@@ -133,7 +132,7 @@ private:
         {
             for (auto &&task : w.tasks)
             {
-                sum = sum + (task->mips / vm->mips_capacity);
+                sum = sum + (task.mips / vm.mips_capacity);
             }
         }
         return sum / vms.size();

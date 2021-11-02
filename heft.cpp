@@ -6,20 +6,20 @@
 
 using namespace std;
 
-vector<Vm*> create_vms()
+vector<Vm> create_vms()
 {
-    vector<Vm*> vms;
+    vector<Vm> vms;
     for (int i = 0; i < 10; i++)
     {
         Vm newVm = Vm(100);
-        vms.push_back(&newVm);
+        vms.push_back(newVm);
     }
     return vms;
 }
 
 int main(int argc, char const *argv[])
 {
-    vector<Vm*> vms = create_vms();
+    vector<Vm> vms = create_vms();
     Task t0 = Task(100);
     Task t1 = Task(100);
     Task t2 = Task(100);

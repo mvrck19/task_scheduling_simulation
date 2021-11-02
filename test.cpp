@@ -1,44 +1,30 @@
 #include <iostream>
-#include <string>
+#include <functional>
 #include "workflow.cpp"
+#include "task.cpp"
+#include <vector>
 using namespace std;
 
-class test
-{
-public:
-    Workflow work;
-    test(Workflow w)
-    {
-
-        work.tasks = w.tasks;
-        work.tasks.at(0)->mips = 320;
-    };
-    test(Task &bull)
-    {
-        bull.mips = 12;
-    }
-    void prnt()
-    {
-        cout << work.tasks.at(0)->mips;
-    }
-};
+//test if dependancies done works
+//redesign the broker run function
 
 int main(int argc, char const *argv[])
 {
+    
     Task t0 = Task(100);
-    Task t1 = Task(100);
-    Task t2 = Task(100);
-    Task t3 = Task(100);
+    // Task t1 = Task(100);
 
-    Workflow w = Workflow();
+    // Workflow w = Workflow();
+    // w.add_task(t0);
+    // w.add_task(t1);
 
-    w.add_task(t0);
-    w.add_task(t1);
-    w.add_task(t2);
-    // w.add_task(t3);
-    test b = test(w);
-    w.display();
-    b.prnt();
+    // w.add_edge(0, 1);
+    // w.tasks.at(0).next.at(0).done=true;
+
+    vector<reference_wrapper<Task>> tasks;
+    tasks.push_back(t0);
+    t0.done=true;
+    cout << tasks.at(0).get().done << endl;
 
     return 0;
 }
