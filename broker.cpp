@@ -30,6 +30,7 @@ public:
                 find_vm(task).assign(task);
             }
         }
+        cout << execution_times();
     }
 
     string execution_times()
@@ -38,6 +39,12 @@ public:
         for (auto &&vm : vms)
         {
             ret.append(to_string(vm.execution_time));
+            if (vm.exec.empty() == false)
+            {
+                // TODO if its not the first time
+                ret.append(" - ");
+                ret.append(vm.exec.back().toString());
+            }
             ret.append(" | ");
         }
         ret.append("\n");

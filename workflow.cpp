@@ -17,12 +17,6 @@ public:
         tasks.at(t2).prev.push_back(tasks.at(t1));
         
     }
-    // Create task and add it to the workflow
-    void add_task(int mips)
-    {
-        Task newTask = Task(mips);
-        tasks.push_back(newTask);
-    }
     // Add already existing task to the workflow
     void add_task(Task t)
     {

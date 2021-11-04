@@ -1,11 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <string>
 #pragma once
 using namespace std;
 class Task
 {
 public:
+   string name="";
    int id;
    int mips;
    double up_rank; //May need to remove later
@@ -13,10 +15,15 @@ public:
    vector<reference_wrapper<Task>> prev;
    vector<reference_wrapper<Task>> next;
 
-   Task(int mips)
+   Task(string name, int mips)
    {
+      this->name = name;
       this->mips = mips;
       this->done = false;
+   }
+
+   string toString(){
+      return name;
    }
 
    bool getDone()
