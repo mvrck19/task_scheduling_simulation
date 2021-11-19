@@ -1,88 +1,112 @@
-#include <iostream>
-#include <vector>
-#include "workflow.cpp"
+#include <stdlib.h>
+
 #include <algorithm>
+#include <iostream>
 #include <string>
+#include <vector>
+
+#include "workflow.cpp"
 
 using namespace std;
 class Broker
 {
-public:
-    vector<Vm*> vms;
+  public:
+    vector<Vm> vms;
     Workflow w;
 
-    Broker(vector<Vm*> vms, Workflow w)
+    Broker(vector<Vm>& vms, Workflow& w)
     {
-        this->vms = vms;
-        this->w = w;
+        this->vms = move(vms);
+        this->w   = move(w);
         create_rank();
         rank_sort();
     };
 
     void run()
     {
-        for (auto &&task : w.tasks)
+        for (auto&& task : w.tasks)
         {
-        cout << execution_times();
-            if (task->dependancies_done())
+            cout << execution_times();
+            if (task.dependancies_done())
             {
-                Vm found_vm = find_vm(*task);
-                found_vm.assign(*task);
+                vms.at(find_least_execution_time()).assign(task);
             }
         }
-
+        cout << execution_times();
     }
 
-    string execution_times(){
-        string ret;
-        for (auto &&vm : vms)
+    // Find index of the vm with the least execution time
+    int find_least_execution_time()
+    {
+        int index = 0;
+        int min   = vms.at(0).get_execution_time();
+        for (int i = 1; i < vms.size(); i++)
         {
-            ret.append(to_string(vm->execution_time));
-            ret.append(" | ");
+            if (vms.at(i).get_execution_time() < min)
+            {
+                min   = vms.at(i).get_execution_time();
+                index = i;
+            }
+        }
+        return index;
+    }
+
+
+    // void run()
+    // {
+    //     for (auto&& task : w.tasks)
+    //     {
+    //         cout << execution_times();
+    //         if (task.dependancies_done())
+    //         {
+    //             find_vm(task).assign(task);
+    //         }
+    //     }
+    //     cout << execution_times();
+    // }
+
+    string execution_times()
+    {
+        string ret;
+        for (auto&& vm : vms)
+        {
+            ret.append(to_string(vm.execution_time));
+            if (vm.exec.empty() == false)
+            {
+                // TODO if its not the first time
+                ret.append(" - ");
+                ret.append(vm.exec.back().toString());
+            }
+            ret.append("\t|");
         }
         ret.append("\n");
         return ret;
     }
 
-    // Finds the vm to which if a task is added the total execution
-    // time of the workflow will be the minimum possible one
-    Vm find_vm(Task task)
-    {
-        double min = vms.at(0)->task_execution_time(task) + vms.at(0)->get_execution_time();
-        Vm minimum = *vms.at(0);
-        for (auto &&vm : vms)
-        {
-            if (vm->task_execution_time(task) + vm->get_execution_time() < min)
-                minimum = *vm;
-        }
-        return minimum;
-    }
-
     void display()
     {
-        for (auto &&task : w.tasks)
+        for (auto&& task : w.tasks)
         {
-            cout << task->up_rank << "\n";
+            cout << task.up_rank << "\n";
         }
     }
 
-private:
-    // TODO write it by hand dont use sort
+  private:
     void rank_sort()
     {
         sort(w.tasks.begin(), w.tasks.end(), comp);
     }
 
-    static bool comp(const Task *a, const Task *b)
+    static bool comp(const Task a, const Task b)
     {
-        return (a->up_rank < b->up_rank) ;
+        return (a.up_rank > b.up_rank);
     }
 
     void create_rank()
     {
-        for (auto &&task : w.tasks)
+        for (auto&& task : w.tasks)
         {
-            task->up_rank = upward_rank(*task);
+            task.up_rank = upward_rank(task);
         }
     }
 
@@ -96,42 +120,46 @@ private:
         }
         else
         {
-            // Is this usefull? I doubt it. Maybe? Leave it for now. If there are any problems with calculations this might be it
+            // Is this usefull? I doubt it. Maybe? Leave it for now. If there are
+            // any problems with calculations this might be it
             // vector<Task> next = task.next;
             return (mean_comp + maxNext(task.next));
         }
+
+        // return rand() % 10 + 1;
     }
-    double maxNext(vector<Task*> next)
+    double maxNext(vector<reference_wrapper<Task>> next)
     {
         double maximum = 0;
-        for (auto &&task : next)
+        for (auto&& task : next)
         {
-            if (upward_rank(*task) > maximum)
-                maximum = upward_rank(*task);
+            if (upward_rank(task) > maximum)
+                maximum = upward_rank(task);
         }
         return maximum;
     }
 
-    // TODO add a return statement for each case, if the function is needed 
-    int exit_task()
-    {
-        for (int i = 0; i < w.tasks.size(); i++)
-        {
-            if (w.tasks.at(i)->next.empty())
-            {
-                return i;
-            }
-        }
-    }
-    // Returns the numerical value of the mean computation of the tasks inside the workflow
+    // TODO add a return statement for each case, if the function is needed
+    // int exit_task()
+    // {
+    //     for (int i = 0; i < w.tasks.size(); i++)
+    //     {
+    //         if (w.tasks.at(i)->next.empty())
+    //         {
+    //             return i;
+    //         }
+    //     }
+    // }
+    // Returns the numerical value of the mean computation of the tasks inside the
+    // workflow
     double mean_computation()
     {
         double sum = 0;
-        for (auto &&vm : vms)
+        for (auto&& vm : vms)
         {
-            for (auto &&task : w.tasks)
+            for (auto&& task : w.tasks)
             {
-                sum = sum + (task->mips / vm->mips_capacity);
+                sum = sum + (task.mips / vm.mips_capacity);
             }
         }
         return sum / vms.size();
@@ -139,7 +167,8 @@ private:
         // return 5;
     }
     // TODO implement later if needed
-    // Returns the numerical value of the mean communication of the tasks inside the workflow
+    // Returns the numerical value of the mean communication of the tasks inside
+    // the workflow
     double mean_communication()
     {
         return 0;

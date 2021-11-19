@@ -1,49 +1,61 @@
+#include <functional>
 #include <iostream>
+#include <string>
 #include <vector>
 #pragma once
 using namespace std;
 class Task
 {
-public:
-   int id;
-   int mips;
-   double up_rank; //May need to remove later
-   bool done=false;
-   vector<Task*> prev;
-   vector<Task*> next;
+  public:
+    string name = "";
+    int id;
+    int mips;
+    double up_rank; // May need to remove later
+    bool done = false;
+    vector<reference_wrapper<Task>> prev;
+    vector<reference_wrapper<Task>> next;
 
-   Task(int mips)
-   {
-      this->mips = mips;
-      this->done = false;
-   }
+    Task(string name, int mips)
+    {
+        this->name = name;
+        this->mips = mips;
+        this->done = false;
+    }
 
-   bool getDone(){
-      return done;
-   }
+    string toString()
+    {
+        return name;
+    }
 
-   void setDone(bool done){
-      this->done=done;
-   }
+    bool getDone()
+    {
+        return done;
+    }
 
-   bool dependancies_done()
-   {
-      bool done = true;
-      for (auto &&task : prev)
-      {
-         if (task->done == false)
-         {
-            done = false;
-            break;
-         }
-      }
-      return done;
-   }
+    void setDone(bool done)
+    {
+        this->done = done;
+    }
 
-   void display()
-   {
-      cout << "Mips: " << mips << "\n";
-      cout << "Parents: " << prev.size() << "\n";
-      cout << "Children: " << next.size() << "\n";
-   }
+    bool dependancies_done()
+    {
+        bool d = true;
+
+        for (auto&& task : prev)
+        {
+            if (task.get().done == false)
+            {
+                d = false;
+                break;
+            }
+        }
+        return d;
+    }
+    
+    void display()
+    {
+        cout << "Mips: " << mips << "\n";
+        cout << "Parents: " << prev.size() << "\n";
+        cout << "Children: " << next.size() << "\n";
+    }
 };

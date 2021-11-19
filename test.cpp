@@ -1,22 +1,18 @@
+#include <functional>
 #include <iostream>
-#include <string>
-#include "vm.cpp"
+#include <vector>
+
+#include "task.cpp"
+#include "workflow.cpp"
 using namespace std;
 
+// test if dependancies done works
+// redesign the broker run function
 
-// It might be a problem with the default bool value of done in a task
-
-void something(Task task){
-    task.done=true;
-}
-
-
-
-int main(int argc, char const *argv[])
+int main(int argc, char const* argv[])
 {
-    Vm vm=Vm(100);
-    Task task = Task(100);
-    vm.assign(task);
-    cout << vm.execution_time << " | " << task.getDone() << "\n";
+    Task t0 = Task("t0", 100);
+
+    cout << t0.toString() << endl;
     return 0;
 }
