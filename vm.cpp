@@ -1,21 +1,22 @@
-#include "task.cpp"
 #include <vector>
+
+#include "task.cpp"
 
 using namespace std;
 class Vm
 {
-public:
+  public:
     int mips_capacity;
     int execution_time;
     vector<Task> exec;
 
     Vm(int capacity)
     {
-        this->mips_capacity = capacity;
+        this->mips_capacity  = capacity;
         this->execution_time = 0;
     };
-    
-    void assign(Task &task)
+
+    void assign(Task& task)
     {
         // Calculate the execution time of the task on the vm
         // Plus the communication cost
@@ -23,7 +24,6 @@ public:
         execution_time = execution_time + task.mips / mips_capacity;
         exec.push_back(task);
 
-        
         // TODO dependancies must be done in this part of the code
         task.setDone(true);
     }
