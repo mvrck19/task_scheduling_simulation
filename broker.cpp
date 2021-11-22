@@ -29,28 +29,44 @@ class Broker
             cout << execution_times();
             if (task.dependancies_done())
             {
-                vms.at(find_least_execution_time()).assign(task);
+                vms.at(find_least_execution_time(task)).assign(task);
             }
         }
         cout << execution_times();
     }
 
     // Find index of the vm with the least execution time
-    int find_least_execution_time()
+    // TODO I dont need just this but the time on the specific vm also
+    // int find_least_execution_time()
+    // {
+    //     int index = 0;
+    //     int min   = vms.at(0).get_execution_time();
+    //     for (int i = 1; i < vms.size(); i++)
+    //     {
+    //         if (vms.at(i).get_execution_time() < min)
+    //         {
+    //             min   = vms.at(i).get_execution_time();
+    //             index = i;
+    //         }
+    //     }
+    //     return index;
+    // }
+
+    // Find the execution time of a task on a vm
+
+    // Find the vm on which the exececution of the task will have the least time if assigned
+    int find_least_execution_time(Task& task)
     {
         int index = 0;
-        int min   = vms.at(0).get_execution_time();
+        int min   = vms.at(0).get_execution_time() + vms.at(0).task_execution_time(task);
+
         for (int i = 1; i < vms.size(); i++)
         {
-            if (vms.at(i).get_execution_time() < min)
-            {
-                min   = vms.at(i).get_execution_time();
+            if (vms.at(i).task_execution_time(task) + vms.at(i).get_execution_time() < min)
                 index = i;
-            }
         }
         return index;
     }
-
 
     // void run()
     // {
@@ -65,13 +81,31 @@ class Broker
     //     cout << execution_times();
     // }
 
+    // string execution_times()
+    // {
+    //     string ret;
+    //     for (auto&& vm : vms)
+    //     {
+    //         ret.append(to_string(vm.execution_time));
+    //         if (vm.exec.empty() == false) // may need to change to if (vm.execution_time!=0)
+    //         {
+    //             // TODO if its not the first time
+    //             ret.append(" - ");
+    //             ret.append(vm.exec.back().toString());
+    //         }
+    //         ret.append("\t|");
+    //     }
+    //     ret.append("\n");
+    //     return ret;
+    // }
+
     string execution_times()
     {
         string ret;
         for (auto&& vm : vms)
         {
             ret.append(to_string(vm.execution_time));
-            if (vm.exec.empty() == false)
+            if (vm.execution_time != 0)
             {
                 // TODO if its not the first time
                 ret.append(" - ");
