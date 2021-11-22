@@ -51,7 +51,7 @@ class Task
         }
         return d;
     }
-    
+
     void display()
     {
         cout << "Mips: " << mips << "\n";
