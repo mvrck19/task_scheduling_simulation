@@ -19,29 +19,28 @@ vector<Vm> create_vms()
     vector<Vm> vms;
     for (int i = 0; i < 2; i++)
     {
-        Vm newVm = Vm(100);
+        Vm newVm = Vm(i + 1); // i+1 cause of the paper
         vms.push_back(newVm);
     }
     return vms;
 }
 
+vector<Task> create_tasks()
+{
+    vector<Task> tasks;
+    for (int i = 0; i < 5; i++)
+    {
+        Task newTask = Task(i + 1, 100); // i+1 cause of the paper
+        tasks.push_back(newTask);
+    }
+    return tasks;
+}
+
 int main(int argc, char const* argv[])
 {
-    vector<Vm> vms = create_vms();
-    vms.push_back(Vm(200));
-
-    Task t0 = Task("t0", 100);
-    Task t1 = Task("t1", 100);
-    Task t2 = Task("t2", 100);
-    Task t3 = Task("t3", 100);
-    Task t4 = Task("t4", 100);
-
     Workflow w = Workflow();
-    w.add_task(t0);
-    w.add_task(t1);
-    w.add_task(t2);
-    w.add_task(t3);
-    w.add_task(t4);
+
+    w.add_tasks(create_tasks());
 
     w.add_edge(0, 1);
     w.add_edge(0, 2);
@@ -49,9 +48,8 @@ int main(int argc, char const* argv[])
     w.add_edge(1, 3);
     w.add_edge(2, 4);
 
-    // w.display();
-    Broker broker = Broker(vms, w);
-    // broker.display();
+    vector<Vm> vms = create_vms();
+    Broker broker  = Broker(vms, w);
     broker.run();
     return 0;
 }

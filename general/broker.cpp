@@ -81,6 +81,10 @@ class Broker
     //     cout << execution_times();
     // }
 
+    int comp_costs[3][10] = {{14, 13, 11, 13, 12, 13, 7, 5, 18, 21},
+                             {16, 19, 13, 8, 13, 16, 15, 11, 12, 7},
+                             {9, 18, 19, 17, 10, 9, 11, 14, 20, 16}};
+
     // string execution_times()
     // {
     //     string ret;
