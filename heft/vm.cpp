@@ -11,24 +11,21 @@ class Vm
     int execution_time;
     vector<Task> exec;
 
-    Vm(int id,int capacity){
-        this->id = id;
+    Vm(int id, int capacity)
+    {
+        this->id             = id;
         this->mips_capacity  = capacity;
         this->execution_time = 0;
     }
 
-    // Vm(int capacity)
-    // {
-    //     this->mips_capacity  = capacity;
-    //     this->execution_time = 0;
-    // };
-
-    Vm(){
+    Vm()
+    {
         this->execution_time = 0;
     };
 
-    Vm(int id){
-        this->id = id;
+    Vm(int id)
+    {
+        this->id             = id;
         this->execution_time = 0;
     };
 
