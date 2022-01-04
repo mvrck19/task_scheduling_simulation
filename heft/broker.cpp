@@ -155,32 +155,40 @@ class Broker
     // Returns the numerical value of the upward rank of a task
     double upward_rank(Task task)
     {
+        double rank = 0;
         double mean_comp = mean_computation(task);
         if (task.next.empty())
         {
-            return mean_comp;
+            rank= mean_comp;
         }
         else
         {
-            return (mean_comp + maxNext(task.next));
+            rank = (mean_comp + maxNext(task));
         }
+        return rank;
     }
 
-    double maxNext(vector<reference_wrapper<Task>> next)
+    double maxNext(Task task)
     {
         double maximum = 0;
         // old code
         // for (auto&& task : next)
         // {   // Find communication cost of the current task (which is it)
         //     // do the loop in i form and get the comm_cost elemnt for free
-        //     if ((upward_rank(task)+task.get().comm_cost_in[0]) > maximum)
-        //         maximum = upward_rank(task);
+        //     if ((upward_rank(task)+task.get().comm_cost_in[i]) > maximum)
+        //         maximum = upward_rank(task)+task.get().comm_cost_in[i];
         // }
 
-        for (int i = 0; i < next.size(); i++)
+        for (int i = 0; i < task.next.size(); i++)
         {
-            if ((upward_rank(next[i])+next[i].get().comm_cost[i]) > maximum)
-                maximum = upward_rank(next[i]);
+            double temp = upward_rank(task.next[i]);
+            //todo
+            //get task.next id
+            //comm_cost_in of task with that id
+            //get (next) task by id function
+            temp=temp+task.next[i].get().comm_cost[i];
+            if ((temp) > maximum)
+                maximum = temp;
         }
 
         return maximum;
