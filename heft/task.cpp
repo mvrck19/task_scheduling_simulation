@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <string>
 #pragma once
 using namespace std;
 class Task
@@ -9,10 +10,12 @@ class Task
   public:
     string name = "";
     int id;
+    int vm_id;
     int mips;
-    double up_rank; // May need to remove later
+    double up_rank;
     bool done = false;
-    int comp_costs[3][10];
+    vector<double> comm_cost;
+    vector<double> comm_cost_out;
     vector<reference_wrapper<Task>> prev;
     vector<reference_wrapper<Task>> next;
 
@@ -31,7 +34,10 @@ class Task
 
     string toString()
     {
-        return name;
+        //Returns id from the papes (so i might need to change it later)
+        // string t = "t";
+        // return t.append(to_string(id+1));
+        return to_string(id+1);
     }
 
     bool getDone()

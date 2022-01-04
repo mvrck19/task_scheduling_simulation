@@ -1,18 +1,19 @@
 #include <functional>
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <iterator>
 
-#include "task.cpp"
-#include "workflow.cpp"
 using namespace std;
 
-// test if dependancies done works
-// redesign the broker run function
-
-int main(int argc, char const* argv[])
+ 
+int main()
 {
-    Task t0 = Task("t0", 100);
-
-    cout << t0.toString() << endl;
-    return 0;
+    std::vector<int> v{12, 36, 28, 41};
+    int n1 = 12;
+     
+    auto result = std::find(begin(v), end(v), n1);
+   
+    cout << v[result] << endl;
+    
 }

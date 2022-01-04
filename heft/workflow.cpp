@@ -11,11 +11,13 @@ class Workflow
   public:
     vector<Task> tasks;
     // Add edge between tasks on the workflow.
-    // (Tasks must already be in the workflow to add edge between them)
-    void add_edge(int t1, int t2)
+    void add_edge(int t1, int t2, int comm_cost)
     {
-        tasks.at(t1).next.push_back(tasks.at(t2));
-        tasks.at(t2).prev.push_back(tasks.at(t1));
+        if(t1 >= tasks.size() || t2 >= tasks.size())
+            throw "Task index out of bounds";
+        tasks[t1].next.push_back(tasks[t2]);
+        tasks[t2].prev.push_back(tasks[t1]);
+        tasks[t2].comm_cost.push_back(comm_cost);
     }
     // Add already existing task to the workflow
     void add_task(Task t)
@@ -35,7 +37,7 @@ class Workflow
     {
         for (int i = 0; i < tasks.size(); i++)
         {
-            tasks.at(i).display();
+            tasks[i].display();
         }
     }
 };

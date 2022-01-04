@@ -76,16 +76,35 @@ class Broker
 
     void assign(Vm& vm, Task& task)
     {
-        if (task.prev.size() == 0)
-            vm.execution_time = vm.execution_time + transfer_time();
-        vm.execution_time = vm.execution_time + comp_costs[vm.id][task.id];
+        // vm.execution_time += task.comm_cost + comp_costs[vm.id][task.id];
+        vm.execution_time +=  comp_costs[vm.id][task.id];
+
         vm.exec.push_back(task);
 
         task.setDone(true);
     }
 
-    int transfer_time()
+    // get vm by id
+    Vm& get_vm(int id)
     {
+        return vms.at(id);
+    }
+
+    // get task by id
+    Task& get_task(int id)
+    {
+        return w.tasks[id];
+    }
+
+    int transfer_time(Task task)
+    {
+        // int transfer = 0;
+        // for (auto&& t : task.prev)
+        // {
+        //     if (t.vm_id != task.vm_id)
+        //         transfer += get_comm_cost(t.vm_id, task.id);
+        // }
+        // return task.comm_cost;
         return 0;
     }
 
@@ -136,7 +155,7 @@ class Broker
     // Returns the numerical value of the upward rank of a task
     double upward_rank(Task task)
     {
-        double mean_comp = mean_computation();
+        double mean_comp = mean_computation(task);
         if (task.next.empty())
         {
             return mean_comp;
@@ -150,29 +169,43 @@ class Broker
     double maxNext(vector<reference_wrapper<Task>> next)
     {
         double maximum = 0;
-        for (auto&& task : next)
+        // old code
+        // for (auto&& task : next)
+        // {   // Find communication cost of the current task (which is it)
+        //     // do the loop in i form and get the comm_cost elemnt for free
+        //     if ((upward_rank(task)+task.get().comm_cost_in[0]) > maximum)
+        //         maximum = upward_rank(task);
+        // }
+
+        for (int i = 0; i < next.size(); i++)
         {
-            if (upward_rank(task) > maximum)
-                maximum = upward_rank(task);
+            if ((upward_rank(next[i])+next[i].get().comm_cost[i]) > maximum)
+                maximum = upward_rank(next[i]);
         }
+
         return maximum;
     }
 
-    double mean_computation()
+    double mean_computation(Task task)
     {
         double sum = 0;
         for (auto&& vm : vms)
         {
-            for (auto&& task : w.tasks)
-            {
-                sum = sum + comp_costs[vm.id][task.id];
-            }
+            sum = sum + comp_costs[vm.id][task.id];
         }
         return sum / vms.size();
     }
 
     double mean_communication()
     {
+        // double sum = 0;
+
+        // for (auto&& task : w.tasks)
+        // {
+        //     sum = sum + task.comm_cost;
+        // }
+        // return sum / w.tasks.size();
+
         return 0;
     }
 };
