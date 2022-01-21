@@ -34,6 +34,9 @@ class Broker
             cout << execution_times();
             if (task.dependancies_done())
             {
+                auto vm = find_least_execution_time(task);
+
+                // vms.at(vm).add_execution_time_of_depency 
                 assign(vms.at(find_least_execution_time(task)), task);
             }
         }
@@ -172,21 +175,36 @@ class Broker
     {
         double maximum = 0;
         // old code
-        // for (auto&& task : next)
+        // for (auto&& task : task.next)
         // {   // Find communication cost of the current task (which is it)
         //     // do the loop in i form and get the comm_cost elemnt for free
         //     if ((upward_rank(task)+task.get().comm_cost_in[i]) > maximum)
         //         maximum = upward_rank(task)+task.get().comm_cost_in[i];
         // }
+        
+        
+
+
+
 
         for (int i = 0; i < task.next.size(); i++)
         {
             double temp = upward_rank(task.next[i]);
             //todo
-            //get task.next id
+            //get task.next id // -or maybe just task id
+            //-----------------------
+            //maybe new function
+            
+            // w.get_task(id).comm_cost
+
+            
+            
+            
+            //--------------------------
             //comm_cost_in of task with that id
             //get (next) task by id function
-            temp=temp+task.next[i].get().comm_cost[i];
+            //--------------------------
+            temp=temp+task.comm_cost[i];
             if ((temp) > maximum)
                 maximum = temp;
         }

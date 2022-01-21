@@ -15,7 +15,6 @@ class Task
     double up_rank;
     bool done = false;
     vector<double> comm_cost;
-    vector<double> comm_cost_out;
     vector<reference_wrapper<Task>> prev;
     vector<reference_wrapper<Task>> next;
 
