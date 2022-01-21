@@ -2,3 +2,4 @@
 - need to change unify the get cost method
 - need to unify the (maybe) unify the id method
 - need to see if the up_rank values are correct
+2) create makefile
