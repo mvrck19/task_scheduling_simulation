@@ -42,13 +42,19 @@ class Broker
         cout << execution_times();
     }
 
-
-    void transfer_task(Task task){
+    void transfer_task(Task task)
+    {
         // for task dependancies
         //      find largest time dependancy && add time to execution of task
-        
-        auto largest = sort().execution_time;
-        
+
+        // auto largest = sort(task.prev.begin,task.prev.end,dep_comp).execution_time;
+        auto largest = max_element(task.prev.begin(), task.prev.end(), dep_comp);
+    }
+
+    // comparrison function for sorting dependancy tasks
+    static bool dep_comp(const Task a, const Task b)
+    {
+        return (a.execution_time > b.execution_time);
     }
 
     // Find the vm on which the exececution of the task will have the least time if assigned
@@ -65,21 +71,6 @@ class Broker
         return index;
     }
 
-    // Returns the id of the vm on which the exececution of the task will have the least time if assigned
-    // Duplicate
-    // int least_execution_time(Task& task)
-    // {
-    //     int id  = vms.at(0).id;
-    //     int min = vms.at(0).get_execution_time() + get_cost(vms.at(0).id, task.id);
-
-    //     for (int i = 1; i < vms.size(); i++)
-    //     {
-    //         if (get_cost(vms.at(i).id, task.id) + vms.at(i).get_execution_time() < min)
-    //             id = vms.at(i).id;
-    //     }
-    //     return id;
-    // }
-
     int get_cost(int vm_id, int task_id)
     {
         return comp_costs[vm_id][task_id];
@@ -88,8 +79,9 @@ class Broker
     void assign(Vm& vm, Task& task)
     {
         // vm.execution_time += task.comm_cost + comp_costs[vm.id][task.id];
-        vm.execution_time +=  comp_costs[vm.id][task.id];
-
+        vm.execution_time += comp_costs[vm.id][task.id];
+        // -----expiramental-----
+        task.execution_time += comp_costs[vm.id][task.id];
         vm.exec.push_back(task);
 
         task.setDone(true);
@@ -107,6 +99,7 @@ class Broker
         return w.tasks[id];
     }
 
+    // not used
     int transfer_time(Task task)
     {
         // int transfer = 0;
@@ -166,11 +159,11 @@ class Broker
     // Returns the numerical value of the upward rank of a task
     double upward_rank(Task task)
     {
-        double rank = 0;
+        double rank      = 0;
         double mean_comp = mean_computation(task);
         if (task.next.empty())
         {
-            rank= mean_comp;
+            rank = mean_comp;
         }
         else
         {
@@ -182,26 +175,13 @@ class Broker
     double maxNext(Task task)
     {
         double maximum = 0;
-        // old code
-        // for (auto&& task : next)
-        // {   // Find communication cost of the current task (which is it)
-        //     // do the loop in i form and get the comm_cost elemnt for free
-        //     if ((upward_rank(task)+task.get().comm_cost_in[i]) > maximum)
-        //         maximum = upward_rank(task)+task.get().comm_cost_in[i];
-        // }
-
         for (int i = 0; i < task.next.size(); i++)
         {
             double temp = upward_rank(task.next[i]);
-            //todo
-            //get task.next id
-            //comm_cost_in of task with that id
-            //get (next) task by id function
-            temp=temp+task.next[i].get().comm_cost[i];
+            temp        = temp + task.next[i].get().comm_cost[i];
             if ((temp) > maximum)
                 maximum = temp;
         }
-
         return maximum;
     }
 
@@ -214,17 +194,10 @@ class Broker
         }
         return sum / vms.size();
     }
-
+    
+    // not used
     double mean_communication()
     {
-        // double sum = 0;
-
-        // for (auto&& task : w.tasks)
-        // {
-        //     sum = sum + task.comm_cost;
-        // }
-        // return sum / w.tasks.size();
-
         return 0;
     }
 };

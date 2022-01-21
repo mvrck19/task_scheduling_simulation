@@ -13,6 +13,7 @@ class Task
     int vm_id;
     int mips;
     double up_rank;
+    double execution_time;
     bool done = false;
     vector<double> comm_cost;
     vector<double> comm_cost_out;
@@ -24,17 +25,19 @@ class Task
         this->id   = id;
         this->mips = mips;
         this->done = false;
+        execution_time = 0;
     }
 
     Task(int id)
     {
         this->id   = id;
         this->done = false;
+        execution_time = 0;
     }
 
     string toString()
     {
-        //Returns id from the papes (so i might need to change it later)
+        //Returns id from the paper (so i might need to change it later)
         // string t = "t";
         // return t.append(to_string(id+1));
         return to_string(id+1);
