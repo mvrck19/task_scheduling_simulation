@@ -34,10 +34,21 @@ class Broker
             cout << execution_times();
             if (task.dependancies_done())
             {
+                // add task dependancy time
+                transfer_task(task);
                 assign(vms.at(find_least_execution_time(task)), task);
             }
         }
         cout << execution_times();
+    }
+
+
+    void transfer_task(Task task){
+        // for task dependancies
+        //      find largest time dependancy && add time to execution of task
+        
+        auto largest = sort().execution_time;
+        
     }
 
     // Find the vm on which the exececution of the task will have the least time if assigned
