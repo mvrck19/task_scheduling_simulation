@@ -35,20 +35,22 @@ class Broker
             if (task.dependancies_done())
             {
                 // add task dependancy time
-                transfer_task(task);
+                task.execution_time+= dep_time(task);
+                // vms.at(dep_time(task));
                 assign(vms.at(find_least_execution_time(task)), task);
             }
         }
         cout << execution_times();
     }
 
-    void transfer_task(Task task)
+    double dep_time(Task task)
     {
         // for task dependancies
         //      find largest time dependancy && add time to execution of task
 
         // auto largest = sort(task.prev.begin,task.prev.end,dep_comp).execution_time;
-        auto largest = max_element(task.prev.begin(), task.prev.end(), dep_comp);
+        return max_element(task.prev.begin(), task.prev.end(), dep_comp).base()->get().execution_time;
+
     }
 
     // comparrison function for sorting dependancy tasks

@@ -4,7 +4,8 @@ todo
 
 doing
 ---
-- assign method accounts for communication costs, if it doesnt create the mechanism for it
+- make the assign method account for dependancy execution times
+- make the assign method account for communication costs, with the transfer_time() method
 
 future
 ---

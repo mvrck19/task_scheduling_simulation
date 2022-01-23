@@ -10,7 +10,8 @@
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
-                // "-Wall"
+                "-Wall",
+                "-pedantic",
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -31,7 +32,9 @@
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
-                "-Wall"
+                "-Wall",
+                "-Wextra",
+                "-pedantic",
             ],
             "options": {
                 "cwd": "${fileDirname}"
