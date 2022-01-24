@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(heft VERSION 0.1.0)
+project(heft VERSION 0.0.1)
 
 include(CTest)
 enable_testing()
+
+set(CMAKE_CXX_CPPCHECK "cppcheck")
 
 add_executable(heft heft/heft.cpp)
 

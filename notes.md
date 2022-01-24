@@ -9,7 +9,6 @@ doing
 
 future
 ---
-- create makefile
 - add argv, argc support so that input can be read from a file - input: number_of_vms,number_of_tasks,node_adgecency(in the form of lines like in the heft main) 
 
 maybe
@@ -20,4 +19,5 @@ maybe
 
 done
 ---
+- create makefile
 - see if the up_rank values are correct

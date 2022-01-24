@@ -10,7 +10,7 @@
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
-                "-Wall",
+                // "-Wall",
                 "-pedantic",
             ],
             "options": {
@@ -33,7 +33,7 @@
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-Wall",
-                "-Wextra",
+                // "-Wextra",
                 "-pedantic",
             ],
             "options": {
