@@ -1,5 +1,6 @@
 todo
 ---
+- fix the flow in the todo fucntions
 - correct results
 
 doing

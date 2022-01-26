@@ -27,6 +27,7 @@ class Broker
         rank_sort();
     };
 
+    // TODO
     void run()
     {
         for (auto&& task : w.tasks)
@@ -77,6 +78,7 @@ class Broker
         return comp_costs[vm_id][task_id];
     }
 
+    // TODO
     void assign(Vm& vm, Task& task)
     {
         // vm.execution_time += task.comm_cost + comp_costs[vm.id][task.id];
@@ -113,6 +115,7 @@ class Broker
         return 0;
     }
 
+    // TODO
     string execution_times()
     {
         string ret;
