@@ -13,6 +13,7 @@ class Task
     int vm_id;
     int mips;
     double up_rank;
+    double total_time;
     double execution_time;
     bool done = false;
     vector<double> comm_cost;

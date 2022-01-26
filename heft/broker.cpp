@@ -36,7 +36,7 @@ class Broker
             if (task.dependancies_done())
             {
                 // add task dependancy time
-                task.execution_time += dep_time(task);
+
                 // vms.at(dep_time(task));
                 assign(vms.at(find_least_execution_time(task)), task);
             }
@@ -81,9 +81,11 @@ class Broker
     // TODO
     void assign(Vm& vm, Task& task)
     {
-        // vm.execution_time += task.comm_cost + comp_costs[vm.id][task.id];
+        // Also add the trransmission time and it should work
+        vm.execution_time += dep_time(task);
         vm.execution_time += comp_costs[vm.id][task.id];
         // -----expiramental-----
+        task.execution_time += dep_time(task);
         task.execution_time += comp_costs[vm.id][task.id];
         vm.exec.push_back(task);
 
@@ -102,18 +104,36 @@ class Broker
         return w.tasks[id];
     }
 
-    // not used
-    int transfer_time(Task task)
+    double transfer_time(Task task)
     {
-        // int transfer = 0;
-        // for (auto&& t : task.prev)
-        // {
-        //     if (t.vm_id != task.vm_id)
-        //         transfer += get_comm_cost(t.vm_id, task.id);
-        // }
-        // return task.comm_cost;
-        return 0;
+        double transfer = 0;
+        for (int i = 0; i < task.prev.size(); i++)
+        {
+            if (task.prev.at(i).get().vm_id != task.vm_id)
+            {
+                transfer = max(transfer, task.comm_cost.at(i));
+            }
+        }
+        return transfer;
+        // return 0;
     }
+
+    // different implementations, not used
+    // double transfer_time2(Task task){
+    //     auto max = max_element(task.comm_cost.begin(), task.comm_cost.end(), transfer_comp);
+    //     auto pos = distance(task.comm_cost.begin(), max);
+    // }
+
+    // not used
+    // static bool transfer_comp(double a, double b){
+    //     return a > b;
+    // }
+
+    // no longer needed
+    // double get_comm_cost(int vm_id, int task_id)
+    // {
+    //     return ;
+    // }
 
     // TODO
     string execution_times()
