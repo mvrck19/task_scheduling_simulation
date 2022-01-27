@@ -63,7 +63,7 @@ class Broker
     int find_least_execution_time(Task& task)
     {
         int index = 0;
-        int min   = vms.at(0).get_execution_time() + get_cost(vms.at(0).id, task.id);
+        double min   = vms.at(0).get_execution_time() + get_cost(vms.at(0).id, task.id);
 
         for (int i = 1; i < vms.size(); i++)
         {

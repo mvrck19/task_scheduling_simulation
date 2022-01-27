@@ -8,7 +8,7 @@ class Vm
   public:
     int id;
     int mips_capacity;
-    int execution_time;
+    double execution_time;
     vector<Task> exec;
 
     Vm(int id, int capacity)
@@ -29,7 +29,7 @@ class Vm
         this->execution_time = 0;
     };
 
-    int get_execution_time()
+    double get_execution_time()
     {
         return execution_time;
     }
