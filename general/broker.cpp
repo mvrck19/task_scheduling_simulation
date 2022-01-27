@@ -35,25 +35,6 @@ class Broker
         cout << execution_times();
     }
 
-    // Find index of the vm with the least execution time
-    // TODO I dont need just this but the time on the specific vm also
-    // int find_least_execution_time()
-    // {
-    //     int index = 0;
-    //     int min   = vms.at(0).get_execution_time();
-    //     for (int i = 1; i < vms.size(); i++)
-    //     {
-    //         if (vms.at(i).get_execution_time() < min)
-    //         {
-    //             min   = vms.at(i).get_execution_time();
-    //             index = i;
-    //         }
-    //     }
-    //     return index;
-    // }
-
-    // Find the execution time of a task on a vm
-
     // Find the vm on which the exececution of the task will have the least time if assigned
     int find_least_execution_time(Task& task)
     {
@@ -68,40 +49,9 @@ class Broker
         return index;
     }
 
-    // void run()
-    // {
-    //     for (auto&& task : w.tasks)
-    //     {
-    //         cout << execution_times();
-    //         if (task.dependancies_done())
-    //         {
-    //             find_vm(task).assign(task);
-    //         }
-    //     }
-    //     cout << execution_times();
-    // }
-
     int comp_costs[3][10] = {{14, 13, 11, 13, 12, 13, 7, 5, 18, 21},
                              {16, 19, 13, 8, 13, 16, 15, 11, 12, 7},
                              {9, 18, 19, 17, 10, 9, 11, 14, 20, 16}};
-
-    // string execution_times()
-    // {
-    //     string ret;
-    //     for (auto&& vm : vms)
-    //     {
-    //         ret.append(to_string(vm.execution_time));
-    //         if (vm.exec.empty() == false) // may need to change to if (vm.execution_time!=0)
-    //         {
-    //             // TODO if its not the first time
-    //             ret.append(" - ");
-    //             ret.append(vm.exec.back().toString());
-    //         }
-    //         ret.append("\t|");
-    //     }
-    //     ret.append("\n");
-    //     return ret;
-    // }
 
     string execution_times()
     {
@@ -111,7 +61,6 @@ class Broker
             ret.append(to_string(vm.execution_time));
             if (vm.execution_time != 0)
             {
-                // TODO if its not the first time
                 ret.append(" - ");
                 ret.append(vm.exec.back().toString());
             }
@@ -188,6 +137,7 @@ class Broker
     //         }
     //     }
     // }
+
     // Returns the numerical value of the mean computation of the tasks inside the
     // workflow
     double mean_computation()
@@ -204,7 +154,7 @@ class Broker
         // test
         // return 5;
     }
-    // TODO implement later if needed
+    // TODO implement later if needed (for now it returns 0)
     // Returns the numerical value of the mean communication of the tasks inside
     // the workflow
     double mean_communication()

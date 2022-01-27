@@ -40,7 +40,6 @@ int main(int argc, char const* argv[])
     w.add_edge(0, 3,9);
     w.add_edge(0, 4,11);
     w.add_edge(0, 5,14);
-    //-----------------
     w.add_edge(1,7,19);
     w.add_edge(1,8,16);
     w.add_edge(2,6,23);
