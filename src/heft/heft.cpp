@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 
+// #include <fmt/core.h>
+
+
 #include "broker.cpp"
 #include "task.cpp"
 #include "workflow.cpp"
@@ -54,5 +57,12 @@ int main(int argc, char const* argv[])
     vector<Vm> vms = create_vms();
     Broker broker  = Broker(vms, w);
     broker.run();
+
+    broker.whatever();
+
+    broker.display();
+    
+    // std::string s = fmt::format("The answer is {}.", 42);
+    // cout << s << endl;
     return 0;
 }

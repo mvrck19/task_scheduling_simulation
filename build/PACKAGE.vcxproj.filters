@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\phaid\Projects\sim4\build\CMakeFiles\10c30d3f44cbe8654441ab39f32910bf\PACKAGE_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{9013042B-B9F7-37B9-AF0C-9B0255E0819A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
