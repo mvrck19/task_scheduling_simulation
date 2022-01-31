@@ -1,5 +1,6 @@
 todo
 ---
+- fix up_rank
 - fix the flow in the todo fucntions
 - correct results
 

@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 
+// #include <fmt/core.h>
+
+
 #include "broker.cpp"
 #include "task.cpp"
 #include "workflow.cpp"
@@ -40,7 +43,6 @@ int main(int argc, char const* argv[])
     w.add_edge(0, 3,9);
     w.add_edge(0, 4,11);
     w.add_edge(0, 5,14);
-    //-----------------
     w.add_edge(1,7,19);
     w.add_edge(1,8,16);
     w.add_edge(2,6,23);
@@ -55,5 +57,12 @@ int main(int argc, char const* argv[])
     vector<Vm> vms = create_vms();
     Broker broker  = Broker(vms, w);
     broker.run();
+
+    broker.whatever();
+
+    broker.display();
+    
+    // std::string s = fmt::format("The answer is {}.", 42);
+    // cout << s << endl;
     return 0;
 }

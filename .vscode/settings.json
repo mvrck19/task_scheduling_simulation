@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "*.tcc": "cpp",
-        "deque": "cpp",
-        "vector": "cpp",
-        "system_error": "cpp"
-    },
-    "cmake.configureOnOpen": true
-}

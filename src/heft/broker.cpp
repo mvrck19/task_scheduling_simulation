@@ -30,6 +30,7 @@ class Broker
     // TODO
     void run()
     {
+        cout << "Vm - Task | Vm - Task | Vm - Task" << endl;
         for (auto&& task : w.tasks)
         {
             cout << execution_times();
@@ -62,8 +63,8 @@ class Broker
     // Find the vm on which the exececution of the task will have the least time if assigned
     int find_least_execution_time(Task& task)
     {
-        int index = 0;
-        int min   = vms.at(0).get_execution_time() + get_cost(vms.at(0).id, task.id);
+        int index  = 0;
+        double min = vms.at(0).get_execution_time() + get_cost(vms.at(0).id, task.id);
 
         for (int i = 1; i < vms.size(); i++)
         {
@@ -79,15 +80,23 @@ class Broker
     }
 
     // TODO
+    // add transfer time
     void assign(Vm& vm, Task& task)
     {
+        task.vm_id= task.id;
         // Also add the trransmission time and it should work
+        vm.execution_time += transfer_time(task);
         vm.execution_time += dep_time(task);
+        vm.execution_time += transfer_time(task);
         vm.execution_time += comp_costs[vm.id][task.id];
         // -----expiramental-----
+        task.execution_time += transfer_time(task);
         task.execution_time += dep_time(task);
+        task.execution_time += transfer_time(task);
+
         task.execution_time += comp_costs[vm.id][task.id];
         vm.exec.push_back(task);
+
 
         task.setDone(true);
     }
@@ -104,18 +113,44 @@ class Broker
         return w.tasks[id];
     }
 
+<<<<<<< Updated upstream:src/heft/broker.cpp
+    // TODO this might be ok, need to check uprank first
+
     double transfer_time(Task task)
     {
+        // cout << "True1" << endl;
+
         double transfer = 0;
         for (int i = 0; i < task.prev.size(); i++)
         {
+            // FIXME
+            // vm_id has not been assigned yet
+            // cout << "True2" << endl;
             if (task.prev.at(i).get().vm_id != task.vm_id)
             {
+                // TODO this is never true !!
+                // cout << "True" << endl;
                 transfer = max(transfer, task.comm_cost.at(i));
             }
         }
+        // cout << "Transfer time " << transfer << endl;
         return transfer;
         // return 0;
+=======
+    // check that if condition is ever true
+    double transfer_time(Task task)
+    {
+        // double transfer = 0;
+        // for (int i = 0; i < task.prev.size(); i++)
+        // {
+        //     if (task.prev.at(i).get().vm_id != task.vm_id)
+        //     {
+        //         transfer = max(transfer, task.comm_cost.at(i));
+        //     }
+        // }
+        // return transfer;
+        return 10;
+>>>>>>> Stashed changes:heft/broker.cpp
     }
 
     // different implementations, not used
@@ -135,19 +170,29 @@ class Broker
     //     return ;
     // }
 
+    void whatever()
+    {
+        cout << endl;
+
+        for (auto&& task : w.tasks)
+        {
+            cout << task.vm_id << ": " << task.id << endl;
+        }
+    }
+
     // TODO
     string execution_times()
     {
         string ret;
         for (auto&& vm : vms)
         {
-            ret.append(to_string(vm.execution_time));
+            ret.append(to_string((int)vm.execution_time));
             if (vm.execution_time != 0)
             {
                 ret.append(" - ");
                 ret.append(vm.exec.back().toString());
             }
-            ret.append("\t|");
+            ret.append("\t\t|");
         }
         ret.append("\n");
         return ret;
@@ -155,9 +200,10 @@ class Broker
 
     void display()
     {
+        cout << endl;
         for (auto&& task : w.tasks)
         {
-            cout << task.up_rank << "\n";
+            cout << "Task id : " << task.id << "\tTask rank : "<< task.up_rank << "\n";
         }
     }
 
@@ -180,6 +226,7 @@ class Broker
         }
     }
 
+    // FIXME
     // Returns the numerical value of the upward rank of a task
     double upward_rank(Task task)
     {
@@ -208,6 +255,9 @@ class Broker
         }
         return maximum;
     }
+
+    // uprank rework
+
 
     double mean_computation(Task task)
     {

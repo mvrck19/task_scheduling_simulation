@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <string>
+
 #pragma once
 using namespace std;
 class Task
@@ -23,25 +23,23 @@ class Task
 
     Task(int id, int mips)
     {
-        this->id   = id;
-        this->mips = mips;
-        this->done = false;
+        this->id       = id;
+        this->mips     = mips;
+        this->done     = false;
         execution_time = 0;
     }
 
     Task(int id)
     {
-        this->id   = id;
-        this->done = false;
+        this->id       = id;
+        this->done     = false;
         execution_time = 0;
     }
 
+    // Returns id from the paper (so i might need to change it later)
     string toString()
     {
-        //Returns id from the paper (so i might need to change it later)
-        // string t = "t";
-        // return t.append(to_string(id+1));
-        return to_string(id+1);
+        return to_string(id + 1);
     }
 
     bool getDone()
@@ -71,8 +69,8 @@ class Task
 
     void display()
     {
-        cout << "Mips: " << mips << "\n";
-        cout << "Parents: " << prev.size() << "\n";
-        cout << "Children: " << next.size() << "\n";
+        cout << "Mips: " << mips << endl;
+        cout << "Parents: " << prev.size() << endl;
+        cout << "Children: " << next.size() << endl;
     }
 };
