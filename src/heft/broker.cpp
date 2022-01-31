@@ -113,7 +113,6 @@ class Broker
         return w.tasks[id];
     }
 
-<<<<<<< Updated upstream:src/heft/broker.cpp
     // TODO this might be ok, need to check uprank first
 
     double transfer_time(Task task)
@@ -136,21 +135,6 @@ class Broker
         // cout << "Transfer time " << transfer << endl;
         return transfer;
         // return 0;
-=======
-    // check that if condition is ever true
-    double transfer_time(Task task)
-    {
-        // double transfer = 0;
-        // for (int i = 0; i < task.prev.size(); i++)
-        // {
-        //     if (task.prev.at(i).get().vm_id != task.vm_id)
-        //     {
-        //         transfer = max(transfer, task.comm_cost.at(i));
-        //     }
-        // }
-        // return transfer;
-        return 10;
->>>>>>> Stashed changes:heft/broker.cpp
     }
 
     // different implementations, not used
