@@ -80,16 +80,20 @@ class Broker
     }
 
     // TODO
+    // add transfer time
     void assign(Vm& vm, Task& task)
     {
         task.vm_id= task.id;
         // Also add the trransmission time and it should work
         vm.execution_time += transfer_time(task);
         vm.execution_time += dep_time(task);
+        vm.execution_time += transfer_time(task);
         vm.execution_time += comp_costs[vm.id][task.id];
         // -----expiramental-----
         task.execution_time += transfer_time(task);
         task.execution_time += dep_time(task);
+        task.execution_time += transfer_time(task);
+
         task.execution_time += comp_costs[vm.id][task.id];
         vm.exec.push_back(task);
 
@@ -109,6 +113,7 @@ class Broker
         return w.tasks[id];
     }
 
+<<<<<<< Updated upstream:src/heft/broker.cpp
     // TODO this might be ok, need to check uprank first
 
     double transfer_time(Task task)
@@ -131,6 +136,21 @@ class Broker
         // cout << "Transfer time " << transfer << endl;
         return transfer;
         // return 0;
+=======
+    // check that if condition is ever true
+    double transfer_time(Task task)
+    {
+        // double transfer = 0;
+        // for (int i = 0; i < task.prev.size(); i++)
+        // {
+        //     if (task.prev.at(i).get().vm_id != task.vm_id)
+        //     {
+        //         transfer = max(transfer, task.comm_cost.at(i));
+        //     }
+        // }
+        // return transfer;
+        return 10;
+>>>>>>> Stashed changes:heft/broker.cpp
     }
 
     // different implementations, not used
