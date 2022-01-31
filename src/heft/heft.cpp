@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-// #include <fmt/core.h>
+#include <fmt/core.h>
 
 
 #include "broker.cpp"
@@ -62,7 +62,6 @@ int main(int argc, char const* argv[])
 
     broker.display();
     
-    // std::string s = fmt::format("The answer is {}.", 42);
-    // cout << s << endl;
+    fmt::print("The answer is {}.", 42);
     return 0;
 }
