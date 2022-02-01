@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20.0)
 
-# set(CMAKE_TOOLCHAIN_FILE "C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE "/home/mvrc/dev/vcpkg/scripts/buildsystems/vcpkg.cmake")
 project(sim4 VERSION 0.1.0)
 
 include(CTest)

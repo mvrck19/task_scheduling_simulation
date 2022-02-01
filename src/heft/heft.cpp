@@ -1,9 +1,6 @@
 #include <iostream>
 #include <vector>
 
-#include <fmt/core.h>
-
-
 #include "broker.cpp"
 #include "task.cpp"
 #include "workflow.cpp"
@@ -62,6 +59,5 @@ int main(int argc, char const* argv[])
 
     broker.display();
     
-    fmt::print("The answer is {}.", 42);
     return 0;
 }

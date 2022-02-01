@@ -30,7 +30,7 @@ class Broker
     // TODO
     void run()
     {
-        cout << "Vm - Task | Vm - Task | Vm - Task" << endl;
+        cout << "Vm - Task \t|Vm - Task \t|Vm - Task" << endl;
         for (auto&& task : w.tasks)
         {
             cout << execution_times();
@@ -83,20 +83,17 @@ class Broker
     // add transfer time
     void assign(Vm& vm, Task& task)
     {
-        task.vm_id= task.id;
+        task.vm_id = task.id;
         // Also add the trransmission time and it should work
         vm.execution_time += transfer_time(task);
         vm.execution_time += dep_time(task);
-        vm.execution_time += transfer_time(task);
         vm.execution_time += comp_costs[vm.id][task.id];
         // -----expiramental-----
         task.execution_time += transfer_time(task);
         task.execution_time += dep_time(task);
-        task.execution_time += transfer_time(task);
 
         task.execution_time += comp_costs[vm.id][task.id];
         vm.exec.push_back(task);
-
 
         task.setDone(true);
     }
@@ -158,6 +155,8 @@ class Broker
     {
         cout << endl;
 
+        cout << "Vm "
+             << "Task" << endl;
         for (auto&& task : w.tasks)
         {
             cout << task.vm_id << ": " << task.id << endl;
@@ -182,12 +181,19 @@ class Broker
         return ret;
     }
 
+    // string execution_times(){
+    //     for (auto&& vm : vms)
+    //     {
+    //         cout << vm.execution_time << " - " << vm.exec.back().toString() << endl;
+    //     }
+    // }
+
     void display()
     {
         cout << endl;
         for (auto&& task : w.tasks)
         {
-            cout << "Task id : " << task.id << "\tTask rank : "<< task.up_rank << "\n";
+            cout << "Task id : " << task.id << "\tTask rank : " << task.up_rank << "\n";
         }
     }
 
@@ -241,7 +247,6 @@ class Broker
     }
 
     // uprank rework
-
 
     double mean_computation(Task task)
     {
