@@ -17,7 +17,8 @@ class Workflow
             throw "Task index out of bounds";
         tasks[t1].next.push_back(tasks[t2]);
         tasks[t2].prev.push_back(tasks[t1]);
-        tasks[t2].comm_cost.push_back(comm_cost);
+        tasks[t1].comm_cost_out.push_back(comm_cost);
+        tasks[t2].comm_cost_in.push_back(comm_cost);
     }
     // Add already existing task to the workflow
     void add_task(Task t)

@@ -116,23 +116,34 @@ class Broker
     {
         // cout << "True1" << endl;
 
-        double transfer = 0;
-        for (int i = 0; i < task.prev.size(); i++)
-        {
-            // FIXME
-            // vm_id has not been assigned yet
-            // cout << "True2" << endl;
-            if (task.prev.at(i).get().vm_id != task.vm_id)
-            {
-                // TODO this is never true !!
-                // cout << "True" << endl;
-                transfer = max(transfer, task.comm_cost.at(i));
-            }
-        }
-        // cout << "Transfer time " << transfer << endl;
-        return transfer;
+        // double transfer = 0;
+        // for (int i = 0; i < task.prev.size(); i++)
+        // {
+        //     // FIXME
+        //     // vm_id has not been assigned yet
+        //     // cout << "True2" << endl;
+        //     if (task.prev.at(i).get().vm_id != task.vm_id)
+        //     {
+        //         // TODO this is never true !!
+        //         // cout << "True" << endl;
+        //         transfer = max(transfer, task.comm_cost.at(i));
+        //     }
+        // }
+        // // cout << "Transfer time " << transfer << endl;
+        // return transfer;
+        // return 0;
+        //--------------------------------
+        // return max_element(task.prev.begin(), task.prev.end(), tr_comp)->get().comm_cost;
+        auto max = max_element(task.comm_cost_in.begin(), task.comm_cost_in.end());
+        auto pos = distance(task.comm_cost_in.begin(), max);
+        return task.comm_cost_in.empty() ? 0 : task.comm_cost_in.at(pos);
         // return 0;
     }
+
+    //-----------------------------------
+    // static bool tr_comp(Task a, Task b){
+    //     return a.comm_cost > b.comm_cost;
+    // }
 
     // different implementations, not used
     // double transfer_time2(Task task){
@@ -239,7 +250,9 @@ class Broker
         for (int i = 0; i < task.next.size(); i++)
         {
             double temp = upward_rank(task.next[i]);
-            temp        = temp + task.next[i].get().comm_cost[i];
+            // temp        = temp + task.next[i].get().comm_cost[i];
+            temp = temp + task.comm_cost_out[i];
+            // comm_cost must be outgoing
             if ((temp) > maximum)
                 maximum = temp;
         }
@@ -247,6 +260,22 @@ class Broker
     }
 
     // uprank rework
+    // double upward_rank(Task task)
+    // {
+    //     double rank      = 0;
+    //     double mean_comp = mean_computation(task);
+    //     if (task.next.empty())
+    //     {
+    //         rank = mean_comp;
+    //     }
+    //     else
+    //     {
+    //         rank = (mean_comp + max(task));
+    //     }
+    //     return rank;
+    // }
+
+
 
     double mean_computation(Task task)
     {

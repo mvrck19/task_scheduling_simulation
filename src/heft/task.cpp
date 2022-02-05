@@ -16,7 +16,7 @@ class Task
     double total_time;
     double execution_time;
     bool done = false;
-    vector<double> comm_cost;
+    vector<double> comm_cost_in;
     vector<double> comm_cost_out;
     vector<reference_wrapper<Task>> prev;
     vector<reference_wrapper<Task>> next;

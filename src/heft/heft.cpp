@@ -53,6 +53,7 @@ int main(int argc, char const* argv[])
 
     vector<Vm> vms = create_vms();
     Broker broker  = Broker(vms, w);
+
     broker.run();
 
     broker.whatever();
