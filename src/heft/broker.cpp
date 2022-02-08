@@ -83,16 +83,20 @@ class Broker
     // add transfer time
     void assign(Vm& vm, Task& task)
     {
-        task.vm_id = task.id;
-        // Also add the trransmission time and it should work
-        vm.execution_time += transfer_time(task);
-        vm.execution_time += dep_time(task);
-        vm.execution_time += comp_costs[vm.id][task.id];
-        // -----expiramental-----
-        task.execution_time += transfer_time(task);
-        task.execution_time += dep_time(task);
+        task.vm_id = vm.id;
+        // Also add the transmission time and it should work
+        auto tr_time = transfer_time(task);
+        auto d_time  = dep_time(task);
+        auto c_cost = get_cost(vm.id, task.id);
 
-        task.execution_time += comp_costs[vm.id][task.id];
+        vm.execution_time += tr_time;
+        cout << tr_time << " - trasfer time" << endl;
+        vm.execution_time += d_time;
+        vm.execution_time += c_cost;
+        // -----expiramental-----
+        task.execution_time += tr_time;
+        task.execution_time += d_time;
+        task.execution_time += c_cost;
         vm.exec.push_back(task);
 
         task.setDone(true);
@@ -110,57 +114,34 @@ class Broker
         return w.tasks[id];
     }
 
-    // TODO this might be ok, need to check uprank first
-
-    double transfer_time(Task task)
-    {
-        // cout << "True1" << endl;
-
-        // double transfer = 0;
-        // for (int i = 0; i < task.prev.size(); i++)
-        // {
-        //     // FIXME
-        //     // vm_id has not been assigned yet
-        //     // cout << "True2" << endl;
-        //     if (task.prev.at(i).get().vm_id != task.vm_id)
-        //     {
-        //         // TODO this is never true !!
-        //         // cout << "True" << endl;
-        //         transfer = max(transfer, task.comm_cost.at(i));
-        //     }
-        // }
-        // // cout << "Transfer time " << transfer << endl;
-        // return transfer;
-        // return 0;
-        //--------------------------------
-        // return max_element(task.prev.begin(), task.prev.end(), tr_comp)->get().comm_cost;
-        auto max = max_element(task.comm_cost_in.begin(), task.comm_cost_in.end());
-        auto pos = distance(task.comm_cost_in.begin(), max);
-        return task.comm_cost_in.empty() ? 0 : task.comm_cost_in.at(pos);
-        // return 0;
+    // returns whether the task is scheduled on the same vm as one of its predecessors
+    static bool same_vm(Task task){
+        bool same = true;
+        for (int i = 0; i < task.prev.size(); i++)
+        {
+            if (task.prev[i].get().vm_id != task.vm_id)
+                same = false;
+        }
+        return same;
     }
 
-    //-----------------------------------
-    // static bool tr_comp(Task a, Task b){
-    //     return a.comm_cost > b.comm_cost;
-    // }
 
-    // different implementations, not used
-    // double transfer_time2(Task task){
-    //     auto max = max_element(task.comm_cost.begin(), task.comm_cost.end(), transfer_comp);
-    //     auto pos = distance(task.comm_cost.begin(), max);
-    // }
 
-    // not used
-    // static bool transfer_comp(double a, double b){
-    //     return a > b;
-    // }
 
-    // no longer needed
-    // double get_comm_cost(int vm_id, int task_id)
-    // {
-    //     return ;
-    // }
+    // returns the time it takes to transfer a task from one vm to another
+    double transfer_time(Task task)
+    {
+        auto max = max_element(task.comm_cost_in.begin(), task.comm_cost_in.end());
+        auto pos = distance(task.comm_cost_in.begin(), max);
+        if (task.comm_cost_in.empty())
+            return 0;
+        // FIXME: check if task.vm_id is the same as task.prev.vm_id for any of the previeous tasks
+        // else if (task.vm_id == task.id)
+        else if (same_vm(task))
+            return 0;
+        else
+            return task.comm_cost_in.at(pos);
+    }
 
     void whatever()
     {
@@ -192,13 +173,6 @@ class Broker
         return ret;
     }
 
-    // string execution_times(){
-    //     for (auto&& vm : vms)
-    //     {
-    //         cout << vm.execution_time << " - " << vm.exec.back().toString() << endl;
-    //     }
-    // }
-
     void display()
     {
         cout << endl;
@@ -227,7 +201,6 @@ class Broker
         }
     }
 
-    // FIXME
     // Returns the numerical value of the upward rank of a task
     double upward_rank(Task task)
     {
@@ -250,32 +223,12 @@ class Broker
         for (int i = 0; i < task.next.size(); i++)
         {
             double temp = upward_rank(task.next[i]);
-            // temp        = temp + task.next[i].get().comm_cost[i];
             temp = temp + task.comm_cost_out[i];
-            // comm_cost must be outgoing
             if ((temp) > maximum)
                 maximum = temp;
         }
         return maximum;
     }
-
-    // uprank rework
-    // double upward_rank(Task task)
-    // {
-    //     double rank      = 0;
-    //     double mean_comp = mean_computation(task);
-    //     if (task.next.empty())
-    //     {
-    //         rank = mean_comp;
-    //     }
-    //     else
-    //     {
-    //         rank = (mean_comp + max(task));
-    //     }
-    //     return rank;
-    // }
-
-
 
     double mean_computation(Task task)
     {
