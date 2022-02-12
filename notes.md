@@ -1,5 +1,6 @@
 todo
 ---
+- map out paper results
 - correct results
 
 doing
