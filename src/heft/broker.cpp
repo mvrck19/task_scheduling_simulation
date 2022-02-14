@@ -14,6 +14,7 @@ class Broker
   public:
     vector<Vm> vms;
     Workflow w;
+    int clock = 0;
 
     const int comp_costs[3][10] = {{14, 13, 11, 13, 12, 13, 7, 5, 18, 21},
                                    {16, 19, 13, 8, 13, 16, 15, 11, 12, 7},
@@ -45,6 +46,85 @@ class Broker
         cout << execution_times();
     }
 
+    // clock_tick should be the inner function called in the funtion
+
+    void do_loop()
+    {
+        while (all_done() != true)
+        {
+            // ready_tasks();
+            // cout << "clock: " << clock << endl;
+            clock_tick(vms, w.tasks);
+        }
+    }
+
+    void clock_tick(vector<Vm>& vms, vector<Task>& tasks)
+    {
+        for (auto&& task : tasks)
+        {
+            // if this takes up a second move it to the ready_tasks function
+            if (task.state == WAITING && task.dependancies_done())
+            {
+                task.state = READY;
+            }
+            if (task.state == READY && task.future == 0)
+            {
+                // task.future += dep_time(task);
+                task.future += transfer_time(task);
+            }
+            if (task.state == READY && task.future > 0)
+            {
+                task.future--;
+            }
+            if (task.state == READY && task.future == 0)
+            {
+                if (idle_vm_available())
+                {
+                    int index = find_idle_vm();
+                    assign(vms.at(index), task);
+                    task.state = RUNNING;
+                    task.future += get_cost(vms[index].id, task.id);
+                }
+            }
+            if (task.state == RUNNING && task.future > 0)
+            {
+                task.future--;
+            }
+            if (task.state == RUNNING && task.future == 0)
+            {
+                task.state = FINNISHED;
+                // vms.at(task.vm_id).exec.push_back(task);
+                vms.at(task.vm_id).set_state(IDLE);
+            }
+        }
+        clock++;
+        cout << "vm1: " << vms.at(0).get_state() << " vm2: " << vms.at(1).get_state()
+             << " vm3: " << vms.at(2).get_state();
+        cout << " | Clock: " << clock << endl;
+    }
+
+    // finds ready tasks and changes their state to ready
+    void ready_tasks()
+    {
+        for (auto&& task : w.tasks)
+        {
+        }
+    }
+
+    bool all_done()
+    {
+        bool done = true;
+        for (auto&& task : w.tasks)
+        {
+            if (task.state != FINNISHED)
+            {
+                done = false;
+                break;
+            }
+        }
+        return done;
+    }
+
     // for task dependancies
     //      find largest time dependancy && add time to execution of task
     double dep_time(Task task)
@@ -74,6 +154,34 @@ class Broker
         return index;
     }
 
+    bool idle_vm_available()
+    {
+        bool available = false;
+        for (auto&& vm : vms)
+        {
+            if (vm.get_state() == IDLE)
+            {
+                available = true;
+                break;
+            }
+        }
+        return available;
+    }
+
+    int find_idle_vm()
+    {
+        int index = 0;
+        for (int i = 0; i < vms.size(); i++)
+        {
+            if (vms.at(i).get_state() == IDLE)
+            {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
     int get_cost(int vm_id, int task_id)
     {
         return comp_costs[vm_id][task_id];
@@ -84,22 +192,26 @@ class Broker
     void assign(Vm& vm, Task& task)
     {
         task.vm_id = vm.id;
+        vm.set_state(USED);
+
+        // task.future = get_cost(vm.id, task.id);
+
         // Also add the transmission time and it should work
-        auto tr_time = transfer_time(task);
-        auto d_time  = dep_time(task);
-        auto c_cost = get_cost(vm.id, task.id);
+        // auto tr_time = transfer_time(task);
+        // auto d_time  = dep_time(task);
+        // auto c_cost = get_cost(vm.id, task.id);
 
-        vm.execution_time += tr_time;
-        cout << tr_time << " - trasfer time" << endl;
-        vm.execution_time += d_time;
-        vm.execution_time += c_cost;
-        // -----expiramental-----
-        task.execution_time += tr_time;
-        task.execution_time += d_time;
-        task.execution_time += c_cost;
-        vm.exec.push_back(task);
+        // vm.execution_time += tr_time;
+        // // cout << tr_time << " - trasfer time" << endl;
+        // // vm.execution_time += d_time;
+        // vm.execution_time += c_cost;
+        // // -----expiramental-----
+        // // task.execution_time += tr_time;
+        // // task.execution_time += d_time;
+        // task.execution_time += c_cost;
+        // vm.exec.push_back(task);
 
-        task.setDone(true);
+        // task.setDone(true);
     }
 
     // get vm by id
@@ -115,7 +227,8 @@ class Broker
     }
 
     // returns whether the task is scheduled on the same vm as one of its predecessors
-    static bool same_vm(Task task){
+    static bool same_vm(Task task)
+    {
         bool same = true;
         for (int i = 0; i < task.prev.size(); i++)
         {
@@ -124,9 +237,6 @@ class Broker
         }
         return same;
     }
-
-
-
 
     // returns the time it takes to transfer a task from one vm to another
     double transfer_time(Task task)
@@ -223,7 +333,7 @@ class Broker
         for (int i = 0; i < task.next.size(); i++)
         {
             double temp = upward_rank(task.next[i]);
-            temp = temp + task.comm_cost_out[i];
+            temp        = temp + task.comm_cost_out[i];
             if ((temp) > maximum)
                 maximum = temp;
         }

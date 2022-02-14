@@ -3,12 +3,20 @@
 #include "task.cpp"
 
 using namespace std;
+
+enum vm_state {
+    IDLE,
+    USED
+};
+
 class Vm
 {
   public:
     int id;
+    int future = 0;
     int mips_capacity;
     double execution_time;
+    vm_state state = IDLE;
     vector<Task> exec;
 
     Vm(int id, int capacity)
@@ -32,5 +40,16 @@ class Vm
     double get_execution_time()
     {
         return execution_time;
+    }
+
+    void set_state(vm_state state)
+    {
+        if (state == IDLE || state == USED)
+            this->state = state;
+    }
+
+    vm_state get_state()
+    {
+        return state;
     }
 };
