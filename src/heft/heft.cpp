@@ -54,13 +54,14 @@ int main(int argc, char const* argv[])
     vector<Vm> vms = create_vms();
     Broker broker  = Broker(vms, w);
 
-    // broker.run();
+    broker.run();
 
     // broker.whatever();
 
-    // broker.display();
+    broker.display();
+    broker.assigned_vms();
 
-    broker.do_loop();
-    cout<< broker.clock <<"\n\n";
+    // broker.do_loop();
+    // cout<< broker.clock <<"\n\n";
     return 0;
 }

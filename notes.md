@@ -1,11 +1,11 @@
 todo
 ---
+- calculate eft and est
 - correct results
 
 doing
 ---
-- make the assign method account for dependancy execution times
-- make the assign method account for communication costs, with the transfer_time() method
+- to calculate est create comm_cost function to calculate the cost of the communication from one task to another
 
 future
 ---
