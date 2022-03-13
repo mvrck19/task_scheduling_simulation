@@ -34,6 +34,7 @@ class Broker
         {
             for (auto&& task : w.tasks)
             {
+                cout << execution_times();
                 double min_eft = DBL_MAX;
                 int min_vm_id  = 0;
                 for (auto&& vm : vms)
@@ -205,6 +206,7 @@ class Broker
         // state
         task.state = FINNISHED;
         // future
+        task.ast = est(task, vm);
         vm.execution_time += ready_time(task, vm) + get_cost(vm.id, task.id);
         vm.exec.push_back(task);
 
@@ -275,6 +277,19 @@ class Broker
         for (auto&& task : w.tasks)
         {
             cout << task.vm_id << ": " << task.id << endl;
+        }
+    }
+
+    // prints the ast and aft of all tasks
+    void details()
+    {
+        for (auto&& task : w.tasks)
+        {
+            cout << "Task: " << task.id;
+            cout << " \tRANK: " << task.up_rank;
+            cout << " \tVM: " << task.vm_id;
+            cout << " \tAST: " << task.ast;
+            cout << " \tAFT: " << task.aft << endl;
         }
     }
 
@@ -391,7 +406,7 @@ class Broker
     {
         return vm.execution_time;
     }
-    // returns
+    // returns task ready time
     double ready_time(Task task, Vm vm)
     {
         auto temp_max = 0;

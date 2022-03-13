@@ -21,6 +21,7 @@ class Task
     int vm_id;
     int mips;
     int future = 0;
+    double ast=0;
     double aft=0;
     double up_rank;
     double total_time;
