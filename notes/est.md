@@ -15,6 +15,12 @@ eft= est+get_cost(task,vm)
 
 -----------------------
 
+[comment]: <> (redo)
+ready_time 
+
+
+
+
 while there are unscheduled tasks do
 for task in tasks:
     for vm in vms:

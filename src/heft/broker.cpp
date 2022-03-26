@@ -1,6 +1,6 @@
-#include <stdlib.h>
-
 #include <algorithm>
+#include <cfloat>
+#include <cstdlib>
 #include <iostream>
 #include <iterator>
 #include <string>
@@ -24,8 +24,13 @@ class Broker
     {
         this->vms = move(vms);
         this->w   = move(w);
+        cout << "Before <------" << endl;
+        print_stuff();
         create_rank();
         rank_sort();
+        cout << "After <------" << endl;
+
+        print_stuff();
     };
 
     void run()
@@ -207,7 +212,10 @@ class Broker
         task.state = FINNISHED;
         // future
         task.ast = est(task, vm);
-        vm.execution_time += ready_time(task, vm) + get_cost(vm.id, task.id);
+        // TODO HERE IS THE PROBLEM WITH DOUBLE TIMES
+        // vm.execution_time += ready_time(task, vm);
+        // vm.execution_time += get_cost(vm.id, task.id);
+        vm.execution_time = task.aft;
         vm.exec.push_back(task);
 
         // task.future = get_cost(vm.id, task.id);
@@ -285,9 +293,9 @@ class Broker
     {
         for (auto&& task : w.tasks)
         {
-            cout << "Task: " << task.id;
+            cout << "Task: " << task.id + 1;
             cout << " \tRANK: " << task.up_rank;
-            cout << " \tVM: " << task.vm_id;
+            cout << " \tVM: " << task.vm_id + 1;
             cout << " \tAST: " << task.ast;
             cout << " \tAFT: " << task.aft << endl;
         }
@@ -321,6 +329,20 @@ class Broker
         for (auto&& vm : vms)
         {
             cout << "Vm id : " << vm.id << "\tVm execution time : " << vm.execution_time << "\n";
+        }
+    }
+
+    void print_stuff()
+    {
+        for (auto&& task : w.tasks)
+        {
+            cout << "------------------\n";
+            cout << "Task id : " << task.id << "\n------------------\n";
+            for (auto&& task : task.prev)
+            {
+                cout << "Prev id: " << task.get().id << " ";
+            }
+            cout << "\n";
         }
     }
 
@@ -391,13 +413,17 @@ class Broker
     // returns earliest finish time
     double eft(Task task, Vm vm)
     {
-        return est(task, vm) + get_cost(vm.id, task.id);
+        double temp = est(task, vm) + get_cost(vm.id, task.id);
+        return temp;
     }
 
     // returns earliest start time
     double est(Task task, Vm vm)
     {
-        return max(available_time(vm), ready_time(task, vm));
+        double available = available_time(vm);
+        double ready     = ready_time(task, vm);
+        double est       = max(available, ready);
+        return est;
     }
 
     // the time when the vm is next available for execution
@@ -424,9 +450,11 @@ class Broker
     double comm_cost(Task task, Task prev)
     {
         int prev_index;
+        int prev_vm_id = prev.vm_id;
         for (int i = 0; i < task.prev.size(); i++)
         {
-            if (task.prev[i].get().id == prev.id)
+            int task_prev_vm_id = task.prev[i].get().vm_id;
+            if (task_prev_vm_id == prev_vm_id)
             {
                 prev_index = i;
                 break;
@@ -434,4 +462,6 @@ class Broker
         }
         return task.comm_cost_in[prev_index];
     }
+
+    
 };
