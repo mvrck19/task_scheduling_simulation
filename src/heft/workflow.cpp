@@ -19,6 +19,9 @@ class Workflow
         tasks[t2].prev.push_back(tasks[t1]);
         tasks[t1].comm_cost_out.push_back(comm_cost);
         tasks[t2].comm_cost_in.push_back(comm_cost);
+        // todo: see if this works
+        tasks[t1].thing_out.push_back(make_tuple(tasks[t2], comm_cost));
+        tasks[t2].thing_in.push_back(make_tuple(tasks[t1], comm_cost));
     }
     // Add already existing task to the workflow
     void add_task(Task t)

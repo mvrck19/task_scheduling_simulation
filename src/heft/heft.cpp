@@ -55,14 +55,8 @@ int main(int argc, char const* argv[])
     Broker broker  = Broker(vms, w);
 
     broker.run();
-
     cout << endl;
-    // broker.whatever();
-
-    // broker.display();
-    // broker.assigned_vms();
     broker.details();
-    // broker.do_loop();
-    // cout<< broker.clock <<"\n\n";
+
     return 0;
 }

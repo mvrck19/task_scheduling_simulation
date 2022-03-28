@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <tuple>
 
 #pragma once
 using namespace std;
@@ -28,6 +29,8 @@ class Task
     double execution_time;
     task_state state = WAITING;
     bool done = false;
+    vector<tuple<Task,int>> thing_in;
+    vector<tuple<Task,int>> thing_out;
     vector<double> comm_cost_in;
     vector<double> comm_cost_out;
     vector<reference_wrapper<Task>> prev;
